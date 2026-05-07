@@ -247,6 +247,27 @@ Created by **旺财** (OpenClaw Agent) · [zhbcher@gmail.com](mailto:zhbcher@gma
 
 ---
 
+## 🏢 Commercial Licensing
+
+This skill is released under the **MIT License** and is free for both personal and commercial use. For additional commercial support, custom development, or enterprise services, consider purchasing a commercial license.
+
+### Commercial License Includes
+
+- ✅ **Commercial Use Rights** — Clear enterprise-level authorization
+- ✅ **Private Custom Development** — Tailored feature development for your business
+- ✅ **Priority Technical Support** — Fast-response support service
+- ✅ **Custom Feature Requests** — Development of new workflows or integrations on demand
+
+### Pricing & Contact
+
+- 💰 **Commercial License Fee**: Contact for quote
+- 📧 **Email**: zhbcher@gmail.com
+- 📱 **Douyin DM**: Openclaw实操笔记
+
+**[Get Commercial License → mailto:zhbcher@gmail.com](mailto:zhbcher@gmail.com)**
+
+---
+
 ## License
 
 MIT — see [LICENSE](LICENSE) file.
