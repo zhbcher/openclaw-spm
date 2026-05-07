@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-Skill-blue)](https://openclaw.ai)
 
-📖 *[English version](#english-brief)*
+📖 *[English version → README_EN.md](README_EN.md)*
 
 ---
 
@@ -191,18 +191,17 @@ MIT — 详见 [LICENSE](LICENSE) 文件。
 
 ---
 
-## English Brief
+## 致谢
 
-SPM (Super Project Manager) is a production-grade software development skill for OpenClaw. It orchestrates the full project lifecycle — from requirements to delivery — with 12 structured workflows, 3-tier quality gates, and a WBS task ledger as the single source of truth.
+SPM 借鉴并增强了 **Superpowers** 技能套件的工作流模式——包括头脑风暴、TDD、子代理开发、代码审查、系统调试、Git Worktree 等。在此基础上我们增加了：
 
-- **5-Phase Lifecycle**: Requirement → Planning → Execution → Quality → Delivery
-- **TDD Iron Law**: No production code without a failing test first
-- **Subagent Dispatch**: Parallel + sequential task execution with automatic WBS binding
-- **Quality Gates**: Always do / Ask first / Never do
+- **PM 级项目管理**（灵魂拷问、假设文档、安全沙箱）
+- **WBS 任务台账**（带退出标准和证据的结构化追踪）
+- **三级质量门控**（必须做/先问/禁止）
+- **心跳中断恢复机制**
+- **完整交付流水线**（发布、部署、关闭）
 
-Install: `git clone https://github.com/zhbcher/openclaw-spm.git ~/.openclaw/skills/spm`
-
-For full documentation, see [SKILL.md](SKILL.md).
+🙏 感谢 Superpowers 作者和 OpenClaw 社区。
 
 ---
 
