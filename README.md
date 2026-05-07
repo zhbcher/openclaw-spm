@@ -1,60 +1,72 @@
 # 🚀 SPM — Super Project Manager for OpenClaw
 
-> Production-grade software project development skill. Orchestrate design → plan → execute → review → ship with structured quality gates and WBS task tracking.
+> 生产级软件项目开发技能。从需求到交付，结构化质量管理 + WBS 任务追踪，全流程自动化编排。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-Skill-blue)](https://openclaw.ai)
 
----
-
-## What is SPM?
-
-SPM is a comprehensive OpenClaw skill that turns natural language requirements into production-ready code with structured end-to-end management. It's an **orchestrator** that routes each project phase to the right workflow, backed by a WBS task ledger as the single source of truth.
-
-### 🎯 Core Capabilities
-
-- **12 Superpowers Workflows** — Brainstorming, TDD, subagent-driven development, code review, systematic debugging, git worktrees
-- **5-Phase Lifecycle** — Requirement → Planning → Execution → Quality → Delivery
-- **WBS Task Ledger** — Structured task tracking with exit criteria, evidence, heartbeats, and interruption recovery
-- **3-Tier Quality Gates** — Always do / Ask first / Never do rules
-- **Subagent Dispatch** — Parallel and sequential task execution with automatic WBS binding
-- **Iron Laws** — No code without approved design, no done without fresh verification evidence
+📖 *[English version](#english-brief)*
 
 ---
 
-## Lifecycle
+## 🎬 关注我
+
+**抖音号：Openclaw实操笔记** —— 每天分享 AI 编程实战技巧，从零到一教你用 OpenClaw 高效开发。
+
+🔗 抖音搜索「**Openclaw实操笔记**」或扫码关注👇
+
+> *（二维码可自行生成后替换此处图片）*
+
+---
+
+## 这是什么？
+
+SPM 是一个完整的 OpenClaw 技能，能把自然语言需求变成生产级代码，全流程结构化管控。它的核心是**编排器模式**——每个项目阶段自动路由到对应的工作流，WBS 任务台账是唯一的真相来源。
+
+### 🎯 核心能力
+
+- **12 个 Superpowers 工作流** — 头脑风暴、TDD、子代理开发、代码审查、系统调试、Git Worktree
+- **5 阶段生命周期** — 需求 → 规划 → 执行 → 质量 → 交付
+- **WBS 任务台账** — 结构化任务跟踪，含退出标准、证据、心跳、中断恢复
+- **三级质量门控** — 必须做 / 先问 / 禁止 三层规则
+- **子代理调度** — 并行 + 串行任务执行，自动绑定 WBS
+- **铁律** — 无批准设计不写代码、无新鲜证据不报完成
+
+---
+
+## 生命周期
 
 ```
-Requirement → Planning → Execution → Quality → Delivery
-    ↑  Manual      ↑ Manual     ↑ Auto     ↑ Auto    ↑ Manual
-    │  Review      │ Review     │           │         │ Decision
+需求 → 规划 → 执行 → 质量 → 交付
+ ↑人工    ↑人工    ↑自动   ↑自动   ↑人工
+ 审批     审批                    决策
 ```
 
-### Phase 1: Requirement
-Soul-searching protocol → brainstorming → design doc → user review
+### 第1阶段：需求
+灵魂拷问 → 头脑风暴 → 设计文档 → 用户审批
 
-### Phase 2: Planning  
-WBS decomposition → file mapping → task ledger → user approval
+### 第2阶段：规划  
+WBS 任务分解 → 文件映射 → 任务台账 → 用户确认
 
-### Phase 3: Execution
-Git worktree setup → subagent dispatch → TDD → WBS binding → heartbeat logging
+### 第3阶段：执行
+Git Worktree 隔离 → 子代理调度 → TDD → WBS 绑定 → 心跳日志
 
-### Phase 4: Quality
-Verification gate → 3-stage code review → 3-tier quality gates → systematic debugging
+### 第4阶段：质量
+验证门 → 三级代码审查 → 质量门控 → 系统调试
 
-### Phase 5: Delivery
-Finish branch → deploy (optional) → delivery summary → ledger closeout
+### 第5阶段：交付
+合并分支 → 部署(可选) → 交付总结 → 台账关闭
 
 ---
 
-## Installation
+## 安装
 
 ```bash
-# 1. Clone to your OpenClaw skills directory
+# 1. 克隆到 OpenClaw skills 目录
 git clone https://github.com/zhbcher/openclaw-spm.git ~/.openclaw/skills/spm
 
-# 2. Enable in openclaw.json
-# Add to skills.entries:
+# 2. 在 openclaw.json 中启用
+# 添加以下配置到 skills.entries：
 {
   "SPM": {
     "enabled": true,
@@ -69,135 +81,129 @@ git clone https://github.com/zhbcher/openclaw-spm.git ~/.openclaw/skills/spm
   }
 }
 
-# 3. Restart OpenClaw
+# 3. 重启 OpenClaw
 openclaw gateway restart
 ```
 
 ---
 
-## Quick Start
+## 快速上手
 
 ```
-User: "Build a user authentication system with JWT"
+你：帮我做一个带JWT的用户认证系统
 
-SPM triggers →
-  1. Soul-searching: "What auth flow? Stateless or session? Refresh tokens?"
-  2. Design doc: Architecture, API contracts, data model
-  3. User approves → WBS plan created
-  4. User says "Go" → Automated execution:
-     ├─ Git worktree setup
-     ├─ Subagent 1: Database schema + migrations
-     ├─ Subagent 2: JWT middleware
-     ├─ Subagent 3: Auth routes (TDD)
-     ├─ Subagent 4: Tests
-     ├─ Parallel dispatch for independent tasks
-     ├─ Code review + quality gates
-     └─ Delivery summary
-  5. Done → Merge to main
+SPM 自动触发 →
+  1. 灵魂拷问：什么认证流程？无状态还是有状态？要不要刷新令牌？
+  2. 设计文档：架构、API 契约、数据模型
+  3. 你批准 → 生成 WBS 计划
+  4. 你说"开始" → 自动执行：
+     ├─ Git Worktree 隔离环境
+     ├─ 子代理1：数据库 Schema + 迁移
+     ├─ 子代理2：JWT 中间件
+     ├─ 子代理3：认证路由（TDD）
+     ├─ 子代理4：测试
+     ├─ 并行调度无依赖任务
+     ├─ 代码审查 + 质量门控
+     └─ 交付总结
+  5. 搞定 → 合并到主分支
 ```
 
 ---
 
-## Project Structure
+## WBS 任务台账
+
+每个项目的**唯一真相来源**。全任务追踪：
+
+| ID | 工作包 | 前置 | 退出标准 | 证据 | 状态 |
+|----|--------|------|----------|------|------|
+| 1  | 项目脚手架 | - | 初始化和测试通过 | `npm test` ✅ | done |
+| 2  | 核心功能A | 1 | API 返回正确数据 | `curl` 输出 | doing |
+
+**铁律：** 没有可验证的证据（文件diff、测试输出、命令结果），状态不能标 `done`。
+
+---
+
+## 质量门控
+
+| 等级 | 规则 |
+|------|------|
+| 🔵 必须做 | 跑测试、遵守规范、验证输入、同步文档 |
+| 🟡 先问再做 | 改数据库、加依赖、改CI/CD、改API |
+| 🔴 绝对不能 | 提交密钥、跳过审查、未经批准删测试 |
+
+### 五条铁律
+1. **无批准设计不写代码**
+2. **无失败测试不写生产代码**（TDD）
+3. **无新鲜验证不报完成**
+4. **无根因分析不行修复**
+5. **无证据不标 done**
+
+---
+
+## 为什么要用 SPM？
+
+| 不用 SPM | 用 SPM |
+|----------|--------|
+| 🤷 "上次写到哪了？" | 📋 WBS 台账：精准断点恢复 |
+| 🔄 合并冲突满天飞 | 🌿 Git Worktree 隔离 |
+| ❌ "我机器上能跑啊" | ✅ 每次报告附新鲜验证 |
+| 🐛 "先试试这几行..." | 🔍 系统化4步调试法 |
+| 📝 拍脑袋写代码 | 📐 设计先行，审批后再动手 |
+| 🚢 "这个测试过吗？" | 🛡️ 三级质量门控 |
+
+---
+
+## 项目结构
 
 ```
 spm/
-├── SKILL.md                          # Skill definition & full docs
-├── workflows/                        # 12 detailed workflow guides
-│   ├── brainstorming.md
-│   ├── writing-plans.md
-│   ├── executing-plans.md
-│   ├── test-driven-development.md
-│   ├── subagent-driven-development.md
-│   ├── dispatching-parallel-agents.md
-│   ├── code-review.md
-│   ├── systematic-debugging.md
-│   ├── verification-before-completion.md
-│   ├── quality-gates.md
-│   ├── finishing-a-development-branch.md
-│   ├── shipping-and-launch.md
-│   └── using-git-worktrees.md
-├── subagents/                        # Subagent prompt templates
-│   ├── implementer-prompt.md
-│   ├── spec-reviewer-prompt.md
-│   └── quality-reviewer-prompt.md
-├── schemas/                          # JSON schemas
-│   ├── project-state.schema.json
-│   └── task-ledger.schema.json
-├── templates/                        # Document templates
-│   ├── prd-template.md
-│   └── review-checklist.md
-├── references/                       # Best practices & recovery
-│   ├── best-practices.md
-│   ├── recovery-patterns.md
-│   └── task-ledger-template.md
-├── scripts/                          # Automation
-│   ├── init-project.sh
-│   └── quality-check.sh
-└── docs/                             # Design documents
-    ├── douyin-video-plan.md
-    └── skill-selection-matrix.md
+├── SKILL.md                      # 技能定义与完整文档
+├── workflows/                    # 12 个详细工作流指南
+├── subagents/                    # 子代理调度 Prompt 模板
+├── schemas/                      # JSON Schema 定义
+├── templates/                    # 文档模板
+├── references/                   # 最佳实践与恢复模式
+├── scripts/                      # 自动化脚本
+└── docs/                         # 设计参考文档
 ```
 
 ---
 
-## WBS Task Ledger
-
-The **single source of truth** for every project. Tracks every task with:
-
-| ID | Work Package | Depends | Exit Criteria | Evidence | Status |
-|----|-------------|---------|---------------|----------|--------|
-| 1  | Setup scaffold | - | Init runs, tests pass | `npm test` ✅ | done |
-| 2  | Core feature A | 1 | API returns data | `curl` output | doing |
-
-**Rule:** No status `done` without verifiable evidence (file diff, test output, command result).
-
----
-
-## Quality Gates
-
-| Tier | Rule |
-|------|------|
-| 🔵 Always | Run tests, follow conventions, validate inputs, sync docs |
-| 🟡 Ask First | DB changes, new deps, CI changes, API breaks |
-| 🔴 Never | Commit secrets, skip review, remove tests without approval |
-
-### Iron Laws
-1. **No code without approved design**
-2. **No production code without a failing test first** (TDD)
-3. **No completion claims without fresh verification evidence**
-4. **No fixes without root cause investigation**
-5. **No WBS `done` without evidence**
-
----
-
-## Requirements
+## 环境要求
 
 - OpenClaw 2026.4+
-- Node.js, npm, git (any modern version)
-- Subagent support enabled in OpenClaw config
+- Node.js、npm、git（任意现代版本）
+- OpenClaw 需开启子代理支持
 
 ---
 
-## Why SPM?
+## 作者
 
-| Without SPM | With SPM |
-|-------------|----------|
-| 🤷 "Where did I leave off?" | 📋 WBS ledger: exact resume point |
-| 🔄 Merge conflicts from stale branches | 🌿 Isolated git worktrees |
-| ❌ "It works on my machine" | ✅ Fresh verification every claim |
-| 🐛 "Let me try random fixes..." | 🔍 Systematic 4-phase debugging |
-| 📝 Code without design | 📐 Design approved before any code |
-| 🚢 "Did we test this?" | 🛡️ 3-tier quality gates |
+**旺财**（OpenClaw Agent）  
+📧 [zhbcher@gmail.com](mailto:zhbcher@gmail.com)  
+🎵 抖音：**Openclaw实操笔记**
 
 ---
 
-## License
+## 许可证
 
-MIT — see [LICENSE](LICENSE) file.
+MIT — 详见 [LICENSE](LICENSE) 文件。
 
 ---
 
-## Author
+## English Brief
 
-Created by **旺财** (OpenClaw Agent) · [zhbcher@gmail.com](mailto:zhbcher@gmail.com)
+SPM (Super Project Manager) is a production-grade software development skill for OpenClaw. It orchestrates the full project lifecycle — from requirements to delivery — with 12 structured workflows, 3-tier quality gates, and a WBS task ledger as the single source of truth.
+
+- **5-Phase Lifecycle**: Requirement → Planning → Execution → Quality → Delivery
+- **TDD Iron Law**: No production code without a failing test first
+- **Subagent Dispatch**: Parallel + sequential task execution with automatic WBS binding
+- **Quality Gates**: Always do / Ask first / Never do
+
+Install: `git clone https://github.com/zhbcher/openclaw-spm.git ~/.openclaw/skills/spm`
+
+For full documentation, see [SKILL.md](SKILL.md).
+
+---
+
+*⭐ 如果这个项目对你有帮助，请给个 Star！关注抖音「Openclaw实操笔记」获取更多 AI 编程实战技巧。*
