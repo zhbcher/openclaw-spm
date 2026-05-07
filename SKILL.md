@@ -6,7 +6,7 @@ metadata:
     emoji: "🚀"
     requires:
       anyBins: ["node", "npm", "git"]
-allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "subagents", "cron", "memory_search", "memory_get"]
+allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "subagents", "cron", "memory_search", "memory_get", "browser"]
 ---
 
 # SPM — Super Project Manager
@@ -324,6 +324,29 @@ See `subagents/` directory for full prompts:
 - `subagents/implementer-prompt.md`
 - `subagents/spec-reviewer-prompt.md`
 - `subagents/quality-reviewer-prompt.md`
+
+### Browser Automation
+
+SPM integrates **agent-browser** as the recommended browser automation tool. When tasks involve web testing, data extraction, or UI automation, the orchestrator can dispatch browser-enabled subagents.
+
+#### Supported Actions
+- `navigate` / `go_back` / `refresh` — Page navigation
+- `click` / `type` / `select_option` / `hover` — Element interaction
+- `screenshot` / `wait_for` / `scroll` — Page operations
+- `get_attribute` / `get_text` / `evaluate` — Data extraction
+- `tabs` / `switch_tab` / `close_tab` — Tab management
+- `console_messages` / `network_requests` — Debug monitoring
+
+#### Usage Pattern
+```
+Task: "Test the login flow on example.com"
+→ SPM creates WBS task with browser steps
+→ Subagent dispatched with browser tool enabled
+→ Subagent executes sequence: navigate → type credentials → click submit → verify success
+→ Evidence: screenshot + console output attached to WBS
+```
+
+Browser automation tasks follow the same TDD and evidence requirements as code tasks.
 
 ---
 

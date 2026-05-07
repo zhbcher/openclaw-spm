@@ -32,6 +32,24 @@ SPM 是一个完整的 OpenClaw 技能，能把自然语言需求变成生产级
 - **子代理调度** — 并行 + 串行任务执行，自动绑定 WBS
 - **铁律** — 无批准设计不写代码、无新鲜证据不报完成
 
+### 🌐 浏览器自动化
+
+SPM 集成 **agent-browser** 作为推荐浏览器工具，支持：
+
+- 网页导航 (navigate, go_back, refresh)
+- 元素交互 (click, type, select_option, hover)
+- 页面操作 (scroll, screenshot, wait_for)
+- 数据提取 (get_attribute, get_text, evaluate)
+- 多标签页管理 (tabs, switch_tab, close_tab)
+- 控制台监控 (console_messages, network_requests)
+
+**适用场景：**
+- Web 应用的功能测试与验证
+- 网页数据采集与爬取
+- 用户界面自动化测试
+- 网页性能监控
+- 跨浏览器兼容性测试
+
 ---
 
 ## 生命周期
@@ -174,6 +192,7 @@ spm/
 - OpenClaw 2026.4+
 - Node.js、npm、git（任意现代版本）
 - OpenClaw 需开启子代理支持
+- **浏览器自动化**：SPM 使用 agent-browser 作为推荐浏览器工具，确保该插件已安装并启用
 
 ---
 
