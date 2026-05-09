@@ -30,12 +30,14 @@
 
 ```
 1. 读 WBS 台账 → 确认任务 ID、Context Brief、退出标准、依赖
-2. 更新台账: status=doing
-3. TDD: RED（写失败测试）→ Verify RED → GREEN（最小实现）→ Verify GREEN → REFACTOR
-4. 自检：跑本文件末尾"完工自检清单"
-5. 修完自检 fail 项 → commit
-6. 更新台账: status=done + 附证据（测试输出 / diff / curl 结果）
-7. 向主编汇报（用下方报告模板）
+2. **📊 跑 Baseline**：`npm test` 保存执行前测试基线
+3. 更新台账: status=doing
+4. TDD: RED（写失败测试）→ Verify RED → GREEN（最小实现）→ Verify GREEN → REFACTOR
+5. 自检：跑本文件末尾"完工自检清单"
+6. 修完自检 fail 项 → commit
+7. **📊 跑 Eval Delta**：对比 baseline vs current → 确认无回归
+8. 更新台账: status=done + 附证据（测试输出 / delta 报告 / diff）
+9. 向主编汇报（用下方报告模板）
 ```
 
 ### 阻塞处理
@@ -150,7 +152,12 @@ Task 2 完成。
 
 ### 测试结果
 ```
-[粘贴测试输出]
+📊 Eval Delta — Task [ID]
+Baseline:  [N] tests | [X]% pass | [Y]% coverage
+Current:   [M] tests | [A]% pass | [B]% coverage
+Delta:     +[M-N] tests | [regressions] regressions | +[B-Y]% coverage
+
+[粘贴实际测试输出]
 ```
 
 ### 修改文件

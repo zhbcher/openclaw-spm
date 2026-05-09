@@ -247,6 +247,7 @@ Update the heartbeat log in the WBS ledger.
 
 **Sub-flow: Verification Gate (see workflows/verification-before-completion.md)**
 Iron Law: NO completion claims without fresh verification evidence.
+- **🆕 Eval Delta**: 每个任务完成前必须做 baseline vs current 对比（测试数、覆盖率、回归检查）
 
 **Sub-flow: Three-Stage Code Review (see workflows/code-review.md)**
 1. **Stage 1: Spec Compliance** — Code matches spec exactly (no YAGNI)

@@ -18,6 +18,50 @@ BEFORE claiming any status or expressing satisfaction:
 5. ONLY THEN: Make the claim
 
 Skip any step = lying, not verifying
+
+## Eval Delta — 执行前后对比 🆕
+
+每个 Phase 3 任务完成后、标记 WBS `done` 之前，必须做执行前后差异对比：
+
+### 步骤
+
+```
+1. BASELINE (任务执行前):
+   npm test 2>&1 | tee /tmp/baseline-<task-id>.log
+   # 记录: 总测试数、通过数、覆盖率
+
+2. CURRENT (任务执行后):
+   npm test 2>&1 | tee /tmp/current-<task-id>.log
+
+3. DELTA (对比):
+   - 新增测试数: grep -c "✓" current.log - grep -c "✓" baseline.log
+   - 覆盖率变化: diff <coverage-before> <coverage-after>
+   - 回归检查: 任何之前通过的测试现在失败？
+```
+
+### 输出格式
+
+```
+📊 Eval Delta — Task [ID]
+
+Baseline:  47 tests | 100% pass | 72% coverage
+Current:   54 tests | 100% pass | 78% coverage
+──────────────────────────────────
+Delta:     +7 tests | 0 regressions | +6% coverage
+
+✅ 正向变化：无回归，覆盖率和测试数均有提升
+```
+
+### 异常情况
+
+| 情况 | 处理 |
+|------|------|
+| 覆盖率为 0 | baseline 时项目还没有测试——记录为 N/A，只对比当前结果 |
+| 回归 > 0 | **STOP**。标记 `blocked`，进入系统调试流程 |
+| 测试数减少 | 确认是否是移除了冗余测试（合理）还是删除了有效测试（违规） |
+| 覆盖率下降 | 标记为 `DONE_WITH_CONCERNS`，在 evidence 中注明 |
+
+**铁律：没有 Eval Delta 对比，不能标记任务 `done`。**
 ```
 
 ## Common Failures
