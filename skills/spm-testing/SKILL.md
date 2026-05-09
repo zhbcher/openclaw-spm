@@ -140,6 +140,51 @@ test('user can login and see dashboard', async ({ page }) => {
 
 **E2E 不要测**：每个字段的每个边界值——留给单元测试。
 
+## E2E 测试专项
+
+### 什么必须有 E2E
+
+```
+✅ 用户注册→登录→使用核心功能 的完整流程
+✅ 支付流程 (加购→结算→支付→确认)
+✅ 权限流程 (普通用户看不到管理页面)
+✅ 关键表单提交流程
+
+❌ 每个按钮的每种状态
+❌ 纯展示页面 (无交互)
+❌ 后端 API (那是集成测试的事)
+```
+
+### E2E 反模式
+
+| # | 反模式 | 修复 |
+|---|--------|------|
+| 1 | 用 CSS class 定位 → 改样式就挂 | 用 `data-testid` |
+| 2 | 硬编码 `waitForTimeout(3000)` | 用 `waitForSelector` / `waitForResponse` |
+| 3 | 测试依赖执行顺序 | 每个 test 独立，`beforeEach` 重置状态 |
+| 4 | 只测 Chrome | CI 里跑 2+ 浏览器 |
+| 5 | E2E 测试太多 → CI 跑 30 分钟 | 控制在 20 个以内，关键流程 |
+
+### Page Object 模式
+
+```typescript
+// ✅ 封装页面操作
+class LoginPage {
+  constructor(private page: Page) {}
+  async login(user: string, pass: string) {
+    await this.page.fill('[data-testid="username"]', user)
+    await this.page.fill('[data-testid="password"]', pass)
+    await this.page.click('[data-testid="login-btn"]')
+  }
+}
+
+test('user can login', async ({ page }) => {
+  const loginPage = new LoginPage(page)
+  await loginPage.login('test', 'password123')
+  await expect(page).toHaveURL('/dashboard')
+})
+```
+
 ---
 
 ## 覆盖率底线
