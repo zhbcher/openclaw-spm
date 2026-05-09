@@ -443,7 +443,9 @@ If user says "skip TDD" or "skip review", follow the user. Iron Laws are default
 openclaw-spm/
 ├── SKILL.md                      # SPM 编排器 (14 workflows)
 ├── skills/                       # 🆕 子技能 (SPM 自动发现)
-│   └── spm-frontend/             # 前端代码规范
+│   ├── spm-frontend/             # 前端代码规范
+│   │   └── SKILL.md
+│   └── spm-design-system/        # 视觉设计规范
 │       └── SKILL.md
 ├── workflows/                    # 14 个工作流
 ├── references/                   # 参考文件
