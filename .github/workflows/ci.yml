@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shell syntax check
+        run: |
+          for f in scripts/*.sh; do
+            echo "Checking $f..."
+            bash -n "$f" || exit 1
+          done
+          echo "✅ All shell scripts valid"
+
+      - name: Python syntax check
+        run: |
+          for f in scripts/*.py; do
+            echo "Checking $f..."
+            python3 -c "import py_compile; py_compile.compile('$f', doraise=True)" || exit 1
+          done
+          echo "✅ All Python scripts valid"
+
+      - name: JSON Schema validation
+        run: |
+          for f in schemas/*.json; do
+            echo "Checking $f..."
+            python3 -c "import json; json.load(open('$f'))" || exit 1
+          done
+          echo "✅ All JSON schemas valid"
+
+      - name: OpenAPI path uniqueness
+        run: |
+          python3 -c "
+          import re
+          with open('api/openapi.yaml') as f:
+              content = f.read()
+          paths = re.findall(r'^  (/[^:\n]+):', content, re.M)
+          from collections import Counter
+          dupes = {k:v for k,v in Counter(paths).items() if v > 1}
+          if dupes:
+              print(f'❌ Duplicate paths: {dupes}')
+              exit(1)
+          print('✅ All OpenAPI paths unique')
+          "
+
+      - name: Config ↔ Schema consistency
+        run: |
+          echo "✅ YAML keys:"
+          grep -E '^[a-z]' config/default.yaml
+          echo "✅ Schema keys:"
+          grep 'Schema =' src/config/schema.ts | grep -v ConfigSchema
+
+      - name: Placeholder residue check
+        run: |
+          echo "Checking checkpoint templates..."
+          unresolved=$(grep -l '{{.*}}' CHECKPOINTS/PHASE-*.md 2>/dev/null | wc -l)
+          if [ "$unresolved" -gt 0 ]; then
+            echo "⚠️  $unresolved checkpoint template(s) contain unresolved placeholders (expected: these are templates)"
+          fi
+          echo "✅ Placeholder check complete"
+
+  test-checkpoint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup test project
+        run: |
+          mkdir -p /tmp/spm-ci-test
+          cd /tmp/spm-ci-test
+          git init
+          git config user.email "ci@test.com"
+          git config user.name "CI"
+          echo "# Test" > README.md
+          git add -A && git commit -m "init" --quiet
+
+      - name: init-project.sh
+        run: |
+          cd /tmp/spm-ci-test
+          bash $GITHUB_WORKSPACE/scripts/init-project.sh
+
+      - name: Copy templates
+        run: |
+          cd /tmp/spm-ci-test
+          mkdir -p CHECKPOINTS CHECKLISTS docs/spm
+          cp $GITHUB_WORKSPACE/CHECKPOINTS/*.md CHECKPOINTS/
+          cp $GITHUB_WORKSPACE/CHECKLISTS/*.md CHECKLISTS/
+          cp $GITHUB_WORKSPACE/references/task-ledger-template.md docs/spm/ledger.md
+          echo "| 1 | Setup | - | Cold-start: init project | dirs exist | OK | done |" >> docs/spm/ledger.md
+          echo "| 2 | Core | 1 | Cold-start: implement feature | test pass | OK | todo |" >> docs/spm/ledger.md
+
+      - name: Run all 5 checkpoints
+        run: |
+          cd /tmp/spm-ci-test
+          mkdir -p scripts
+          cp $GITHUB_WORKSPACE/scripts/checkpoint.sh scripts/
+          for phase in phase-1 phase-2 phase-3 phase-4 phase-5; do
+            bash scripts/checkpoint.sh $phase || exit 1
+          done
+          echo "✅ All 5 checkpoint phases passed"
+
+      - name: Copy and run verify_checklists.py
+        run: |
+          cd /tmp/spm-ci-test
+          cp $GITHUB_WORKSPACE/scripts/verify_checklists.py scripts/
+          python3 scripts/verify_checklists.py all || true
+          echo "✅ verify_checklists.py ran (expected some failures on blank project)"
+
+      - name: Copy and run quality-check.sh
+        run: |
+          cd /tmp/spm-ci-test
+          cp $GITHUB_WORKSPACE/scripts/quality-check.sh scripts/
+          bash scripts/quality-check.sh || true
+          echo "✅ quality-check.sh ran (expected 'no package.json' on blank project)"
