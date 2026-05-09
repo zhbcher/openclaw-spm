@@ -15,7 +15,7 @@ Create at `docs/spm/ledger.md` before starting substantive execution.
 
 ## WBS
 
-| ID | Work Package | Depends on | Exit Criteria | Evidence | Status |
+| ID | Work Package | Dependencies | Exit Criteria | Evidence | Status |
 |----|-------------|-----------|---------------|----------|--------|
 | 1 | [init] | - | [how we know it's done] | [file/command output] | todo |
 

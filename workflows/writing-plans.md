@@ -32,7 +32,7 @@ Simultaneously create the WBS ledger at `docs/spm/ledger.md`:
 
 ```markdown
 ## WBS
-| ID | Work Package | Depends | Exit Criteria | Evidence | Status |
+| ID | Work Package | Dependencies | Exit Criteria | Evidence | Status |
 |----|-------------|---------|---------------|----------|--------|
 | 1  | [Task name]  | -        | [exit criteria] | - | todo |
 ```

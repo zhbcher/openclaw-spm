@@ -1,0 +1,45 @@
+# SPM Configuration — Default Values
+# Copy to config/production.yaml or config/staging.yaml for environment overrides.
+# Do NOT commit secrets; use environment variables or gitignored override files.
+
+project:
+  # Execution mode: subagent (one per task) | inline (current session)
+  execution_mode: subagent
+  # Parallel subagent dispatch for independent tasks
+  parallel_subagents: true
+  # Max concurrent subagents (0 = unlimited)
+  max_parallel_subagents: 4
+
+quality:
+  # Three-tier quality gates
+  gates_enabled: true
+  # Auto-run checklist verification after each task
+  auto_checkpoint: true
+  # Test coverage target (percentage)
+  coverage_target: 80
+
+tracking:
+  # WBS ledger path (relative to project root)
+  wbs_ledger_path: docs/spm/ledger.md
+  # Heartbeat interval for progress logging
+  heartbeat_interval: 10m
+  # Auto-update WBS ledger on task status change
+  auto_update_ledger: true
+
+review:
+  # Enable spec compliance reviewer subagent
+  spec_reviewer: true
+  # Enable code quality reviewer subagent
+  quality_reviewer: true
+  # Reviewer model override (empty = use default)
+  reviewer_model: ""
+
+deployment:
+  # Enable deployment pipeline (Phase 5)
+  enabled: false
+  # Default deployment environment
+  environment: development
+
+logging:
+  level: info  # debug | info | warn | error
+  format: json  # json | text

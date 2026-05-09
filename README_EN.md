@@ -15,7 +15,7 @@ SPM is a comprehensive OpenClaw skill that turns natural language requirements i
 
 ### 🎯 Core Capabilities
 
-- **12 Workflows** — Brainstorming, TDD, subagent-driven development, code review, systematic debugging, git worktrees
+- **13 Workflows** — Brainstorming, TDD, subagent-driven development, code review, systematic debugging, git worktrees
 - **5-Phase Lifecycle** — Requirement → Planning → Execution → Quality → Delivery
 - **WBS Task Ledger** — Structured task tracking with exit criteria, evidence, heartbeats, and interruption recovery
 - **3-Tier Quality Gates** — Always do / Ask first / Never do rules
@@ -104,7 +104,7 @@ SPM triggers →
 
 The **single source of truth** for every project. Tracks every task with:
 
-| ID | Work Package | Depends | Exit Criteria | Evidence | Status |
+| ID | Work Package | Dependencies | Exit Criteria | Evidence | Status |
 |----|-------------|---------|---------------|----------|--------|
 | 1  | Setup scaffold | - | Init runs, tests pass | `npm test` ✅ | done |
 | 2  | Core feature A | 1 | API returns data | `curl` output | doing |
@@ -135,7 +135,7 @@ The **single source of truth** for every project. Tracks every task with:
 ```
 spm/
 ├── SKILL.md                          # Skill definition & full docs
-├── workflows/                        # 12 detailed workflow guides
+├── workflows/                        # 13 detailed workflow guides
 │   ├── brainstorming.md
 │   ├── writing-plans.md
 │   ├── executing-plans.md
@@ -159,7 +159,11 @@ spm/
 ├── templates/                        # Document templates
 │   ├── prd-template.md
 │   └── review-checklist.md
-├── references/                       # Best practices & recovery
+├── references/                       # Best practices, recovery, single entry for task execution
+│   ├── best-practices.md
+│   ├── recovery-patterns.md
+│   ├── task-ledger-template.md
+│   └── TASK-EXECUTION.md            # ⭐ Read before executing any task
 │   ├── best-practices.md
 │   ├── recovery-patterns.md
 │   └── task-ledger-template.md

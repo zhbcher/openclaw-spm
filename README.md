@@ -25,7 +25,7 @@ SPM 是一个完整的 OpenClaw 技能，能把自然语言需求变成生产级
 
 ### 🎯 核心能力
 
-- **12 个 Superpowers 工作流** — 头脑风暴、TDD、子代理开发、代码审查、系统调试、Git Worktree
+- **13 个 Superpowers 工作流** — 头脑风暴、TDD、子代理开发、代码审查、系统调试、Git Worktree
 - **5 阶段生命周期** — 需求 → 规划 → 执行 → 质量 → 交付
 - **WBS 任务台账** — 结构化任务跟踪，含退出标准、证据、心跳、中断恢复
 - **三级质量门控** — 必须做 / 先问 / 禁止 三层规则
@@ -176,12 +176,27 @@ SPM 自动触发 →
 ```
 spm/
 ├── SKILL.md                      # 技能定义与完整文档
-├── workflows/                    # 12 个详细工作流指南
+├── workflows/                    # 13 个详细工作流指南
 ├── subagents/                    # 子代理调度 Prompt 模板
 ├── schemas/                      # JSON Schema 定义
 ├── templates/                    # 文档模板
-├── references/                   # 最佳实践与恢复模式
+├── references/                   # 最佳实践、恢复模式、单任务执行入口
+│   ├── best-practices.md
+│   ├── recovery-patterns.md
+│   ├── task-ledger-template.md
+│   └── TASK-EXECUTION.md        # ⭐ 执行任务前必读的单一入口
 ├── scripts/                      # 自动化脚本
+│   ├── init-project.sh
+│   ├── quality-check.sh
+│   ├── checkpoint.sh
+│   ├── setup-checkpoints.sh
+│   ├── verify_checklists.py
+│   ├── generate.sh
+│   ├── validate_contract.sh
+│   └── e2e.sh
+├── CHECKPOINTS/                  # 阶段硬节点模板
+├── CHECKLISTS/                   # 完工自检清单
+├── api/                          # API 契约 (OpenAPI)
 └── docs/                         # 设计参考文档
 ```
 

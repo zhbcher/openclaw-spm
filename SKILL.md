@@ -6,7 +6,7 @@ metadata:
     emoji: "🚀"
     requires:
       anyBins: ["node", "npm", "git"]
-allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "subagents", "cron", "memory_search", "memory_get", "browser"]
+allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "sessions_yield", "subagents", "cron", "memory_search", "memory_get", "browser"]
 ---
 
 # SPM — Super Project Manager
@@ -15,7 +15,7 @@ allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "s
 
 SPM is a comprehensive skill for software project development in OpenClaw. It integrates:
 
-- **Superpowers** (12 skills): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees
+- **Superpowers** (13 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, and more
 - **PM enhancements**: Soul-searching protocol, assumption documentation, safe sandbox (/freeze & /guard), three-tier quality gates, project scaffolding, deployment pipeline
 - **WBS Executor**: Structured task ledger with exit criteria, evidence tracking, heartbeat logging, interruption recovery, delivery summary
 
@@ -132,7 +132,7 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 - Success criteria: [how we verify]
 
 ## WBS
-| ID | Work Package | Depends | Exit Criteria | Evidence | Status |
+| ID | Work Package | Dependencies | Exit Criteria | Evidence | Status |
 |----|-------------|---------|---------------|----------|--------|
 | 1  | Setup scaffold | - | Init script runs, tests pass | npm test output | done |
 | 1.1| Install deps | 1 | All deps installed | npm ls | done |
@@ -389,6 +389,28 @@ Browser automation tasks follow the same TDD and evidence requirements as code t
 
 ---
 
+## Quality Enhancements (Optional but Recommended)
+
+To further strengthen delivery confidence, SPM supports optional **Checkpoint** and **Checklist** systems. These are inspired by professional engineering practices and can be adopted incrementally.
+
+See `docs/quality-enhancements.md` for complete documentation.
+
+**Quick enable:**
+```bash
+cd your-spm-project
+bash skills/spm/scripts/setup-checkpoints.sh
+```
+
+This installs:
+- Checkpoint templates (`CHECKPOINTS/`) for hard phase stops
+- Checklist templates (`CHECKLISTS/`) for self-review
+- Automation scripts (`scripts/checkpoint.sh`, `scripts/verify_checklists.py`)
+- npm scripts: `npm run checkpoint`, `npm run verify:code`, `npm run verify:deploy`
+
+After setup, each phase can generate a checkpoint report (`./scripts/checkpoint.sh phase-1`) and tasks can be verified against the appropriate checklist before marking `done`.
+
+---
+
 ## Instruction Priority
 
 1. **User's explicit instructions** (AGENTS.md, direct commands) — highest
@@ -403,6 +425,14 @@ If user says "skip TDD" or "skip review", follow the user. Iron Laws are default
 
 ```
 project-root/
+├── CHECKPOINTS/               # (Optional) Checkpoint templates
+│   ├── PHASE-1-REQUIREMENTS.md
+│   ├── PHASE-2-PLANNING.md
+│   ├── PHASE-3-EXECUTION.md
+│   └── PHASE-5-DELIVERY.md
+├── CHECKLISTS/                # (Optional) Self-review checklists
+│   ├── CODE-COMPLETION.md
+│   └── DEPLOYMENT-READINESS.md
 ├── docs/spm/
 │   ├── specs/                 # Design documents
 │   │   └── YYYY-MM-DD-feature-design.md
@@ -414,6 +444,8 @@ project-root/
 ├── tests/                     # Test suite
 └── package.json
 ```
+
+**Note:** `CHECKPOINTS/` and `CHECKLISTS/` are part of the optional Quality Enhancements. Copy them from the skill repo or run `scripts/setup-checkpoints.sh` to enable.
 
 ---
 
@@ -464,8 +496,31 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 
 - `workflows/` — Detailed workflow docs for each phase
 - `references/` — Templates, best practices, recovery patterns
+- `references/TASK-EXECUTION.md` — **执行单任务前必读的单一入口**（合并 TDD + Gate Function + WBS 更新规则 + 完工自检）
 - `schemas/` — JSON schemas for project state, ledger, quality gates
 - `subagents/` — Subagent dispatch prompt templates
 - `scripts/` — Automation scripts (init, quality check, auto-execute)
 - `templates/` — PRD, plan, review checklist templates
+- `docs/quality-enhancements.md` — **Checkpoint, Checklist, Contract, E2E, Config-as-Code**
 - `docs/skill-selection-matrix.md` — Design rationale document
+
+---
+
+## 各阶段文件读取指南
+
+不同阶段读不同的文件，避免盲目全读浪费 token。
+
+| 阶段 | 必读（每次都看） | 一次性看完 / 按需查 |
+|------|-----------------|-------------------|
+| Phase 1 需求 | `workflows/brainstorming.md` | `templates/prd-template.md` |
+| Phase 2 规划 | `workflows/writing-plans.md` + `references/task-ledger-template.md` | `schemas/task-ledger.schema.json` |
+| Phase 3 执行（每任务） | **`references/TASK-EXECUTION.md`** 单一入口 | `workflows/test-driven-development.md`（卡壳时） |
+| Phase 3 子代理调度 | `workflows/subagent-driven-development.md` + `subagents/implementer-prompt.md` | `subagents/spec-reviewer-prompt.md` + `subagents/quality-reviewer-prompt.md` |
+| Phase 3 并行 | `workflows/dispatching-parallel-agents.md` | — |
+| Phase 4 质量 | `workflows/verification-before-completion.md` + `workflows/code-review.md` | `workflows/quality-gates.md` + `CHECKLISTS/CODE-COMPLETION.md` |
+| Phase 4 调试 | `workflows/systematic-debugging.md` | — |
+| Phase 5 交付 | `workflows/finishing-a-development-branch.md` | `workflows/shipping-and-launch.md` + `CHECKLISTS/DEPLOYMENT-READINESS.md` |
+| 全局追踪 | `schemas/project-state.schema.json` | `references/recovery-patterns.md`（中断恢复时） |
+| Git Worktree | `workflows/using-git-worktrees.md` | — |
+
+> **关键**：Phase 3 执行单任务时，`references/TASK-EXECUTION.md` 是唯一必读——它合并了 TDD 铁律 + Gate Function + WBS 更新规则 + 完工自检清单。不要再跳转多个文件。

@@ -56,7 +56,7 @@ Don't use when:
 
 ```markdown
 WBS:
-| ID | Work Package | Depends | Exit Criteria | Status |
+| ID | Work Package | Dependencies | Exit Criteria | Status |
 |----|-------------|---------|---------------|--------|
 | 2  | Add user model | 1 | Schema created, migration works | doing |
 | 3  | Add auth endpoints | 1 | API returns tokens | doing |
