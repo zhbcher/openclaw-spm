@@ -124,3 +124,5 @@ export const isProduction = () => get('deployment.environment') === 'production'
 export const isSubagentMode = () => get('project.execution_mode') === 'subagent';
 export const getCoverageTarget = () => get('quality.coverage_target') as number;
 export const getHeartbeatInterval = () => get('tracking.heartbeat_interval');
+export const getModelForTier = (tier: 'fast' | 'standard' | 'strong') =>
+  get(`model_routing.${tier}.model`) as string;

@@ -8,7 +8,18 @@ Execute implementation plan by dispatching a fresh subagent per task. Each subag
 
 **Cold-Start Rule:** Every subagent receives the task's Context Brief — they must be able to execute without reading any other task's details.
 
-**Model Routing Rule:** Dispatch subagent at the task's `model_tier` — fast model for boilerplate/config tasks, standard for implementation, strong for architecture/critical tasks.
+**Model Routing Rule:** Dispatch subagent at the task's `model_tier` — each tier maps to a different provider to avoid rate-limit contention during parallel dispatch.
+
+| Tier | Model | Provider | Use Case |
+|------|-------|----------|----------|
+| fast | `step35` | nvidia-nvcf | boilerplate, config, simple refactor |
+| standard | `SensenovaDeepSeek` | sensenova | regular implementation, tests |
+| strong | `DeepSeekV4Pro` | deepseek | architecture, root-cause, invariants |
+
+```
+# Tier-based dispatch example:
+sessions_spawn(task="...", model=get_model_for_tier(task.model_tier))
+```
 
 ## The Process
 

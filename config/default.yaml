@@ -31,8 +31,23 @@ review:
   spec_reviewer: true
   # Enable code quality reviewer subagent
   quality_reviewer: true
-  # Reviewer model override (empty = use default)
+  # Enable plan reviewer subagent
+  plan_reviewer: true
+  # Reviewer model override (empty = use tier-based routing)
   reviewer_model: ""
+
+# Model tier routing — maps task complexity to model/provider
+# Each tier uses a different provider to avoid rate-limit contention during parallel dispatch
+model_routing:
+  fast:
+    model: "nvidia-nvcf/stepfun-ai/step-3.5-flash"
+    description: "boilerplate, config changes, simple refactors"
+  standard:
+    model: "sensenova/deepseek-v4-flash"
+    description: "regular implementation, test writing, medium complexity"
+  strong:
+    model: "deepseek/deepseek-v4-pro"
+    description: "architecture decisions, root-cause analysis, multi-file invariants"
 
 deployment:
   # Enable deployment pipeline (Phase 5)

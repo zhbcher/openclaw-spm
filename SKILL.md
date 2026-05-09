@@ -223,7 +223,7 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 
 **Sub-flow: Task Execution**
 - For **Subagent-Driven**: see `workflows/subagent-driven-development.md`
-  - Each subagent receives **cold-start Context Brief** + **model tier routing**
+  - Each subagent receives **cold-start Context Brief** + **model tier routing** (fast→step35, standard→SensenovaDeepSeek, strong→DeepSeekV4Pro — 三 provider 隔离避免速率限制)
   - BLOCKED tasks trigger mutation protocol (see references/plan-mutation.md)
 - For **Inline**: see `workflows/executing-plans.md`
 - For **Parallel Tasks**: see `workflows/dispatching-parallel-agents.md`

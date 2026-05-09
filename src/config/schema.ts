@@ -25,7 +25,20 @@ const TrackingSchema = z.object({
 const ReviewSchema = z.object({
   spec_reviewer: z.boolean().default(true),
   quality_reviewer: z.boolean().default(true),
+  plan_reviewer: z.boolean().default(true),
   reviewer_model: z.string().default(''),
+});
+
+// Model tier routing — maps task complexity to model/provider
+const ModelTierSchema = z.object({
+  model: z.string(),
+  description: z.string(),
+});
+
+const ModelRoutingSchema = z.object({
+  fast: ModelTierSchema,
+  standard: ModelTierSchema,
+  strong: ModelTierSchema,
 });
 
 // Deployment configuration
@@ -46,6 +59,7 @@ export const ConfigSchema = z.object({
   quality: QualitySchema.optional().default({}),
   tracking: TrackingSchema.optional().default({}),
   review: ReviewSchema.optional().default({}),
+  model_routing: ModelRoutingSchema,
   deployment: DeploymentSchema.optional().default({}),
   logging: LoggingSchema.optional().default({}),
 });
