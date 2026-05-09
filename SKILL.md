@@ -170,6 +170,8 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 
 **Trigger:** User says "build X", "start project", "implement feature"
 
+**🆕 外部资源分析 (optional):** 如果项目需要借鉴外部代码/技能/方案，先走 `workflows/external-research.md` → 结构化对比 → 输出采纳清单 → 再进入标准需求流程。
+
 **Sub-flow: Soul-Searching Protocol**
 1. Before any design work, throw back **3 lethal probing questions** about scope/purpose/constraints
 2. Surface assumptions explicitly: "I'm assuming X — correct me now or I'll proceed"
@@ -507,7 +509,8 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 
 ## See Also
 
-- `workflows/` — Detailed workflow docs for each phase
+- `workflows/` — Detailed workflow docs for each phase (14 workflows)
+- `workflows/external-research.md` — **🆕 外部资源分析**：结构化对比 + 采纳清单
 - `references/` — Templates, best practices, recovery patterns
 - `references/TASK-EXECUTION.md` — **执行单任务前必读的单一入口**（合并 TDD + Gate Function + WBS 更新规则 + 完工自检）
 - `references/plan-mutation.md` — **🆕 计划突变协议**：split / insert / skip / reorder / abandon 操作规范
@@ -526,6 +529,7 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 
 | 阶段 | 必读（每次都看） | 一次性看完 / 按需查 |
 |------|-----------------|-------------------|
+| Phase 0 外部研究 | `workflows/external-research.md` | — |
 | Phase 1 需求 | `workflows/brainstorming.md` | `templates/prd-template.md` |
 | Phase 2 规划 | `workflows/writing-plans.md` + `references/task-ledger-template.md` | `schemas/task-ledger.schema.json` |
 | Phase 3 执行（每任务） | **`references/TASK-EXECUTION.md`** 单一入口 | `workflows/test-driven-development.md`（卡壳时） |

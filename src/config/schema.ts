@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 // Project execution configuration
 const ProjectSchema = z.object({
+  project_type: z.enum(['code', 'docs', 'config']).default('code'),
   execution_mode: z.enum(['subagent', 'inline']).default('subagent'),
   parallel_subagents: z.boolean().default(true),
   max_parallel_subagents: z.number().positive().default(4),

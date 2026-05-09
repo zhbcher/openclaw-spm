@@ -28,16 +28,32 @@
 
 ## 执行流程（单任务）
 
+### 代码项目 (project_type: code)
+
 ```
 1. 读 WBS 台账 → 确认任务 ID、Context Brief、退出标准、依赖
-2. **📊 跑 Baseline**：`npm test` 保存执行前测试基线
+2. 📊 跑 Baseline：npm test 保存执行前测试基线
 3. 更新台账: status=doing
-4. TDD: RED（写失败测试）→ Verify RED → GREEN（最小实现）→ Verify GREEN → REFACTOR
+4. TDD: RED → Verify RED → GREEN → Verify GREEN → REFACTOR
 5. 自检：跑本文件末尾"完工自检清单"
 6. 修完自检 fail 项 → commit
-7. **📊 跑 Eval Delta**：对比 baseline vs current → 确认无回归
-8. 更新台账: status=done + 附证据（测试输出 / delta 报告 / diff）
-9. 向主编汇报（用下方报告模板）
+7. 📊 跑 Eval Delta：对比 baseline vs current → 确认无回归
+8. 更新台账: status=done + 附证据
+9. 向主编汇报
+```
+
+### 非代码项目 (project_type: docs | config)
+
+```
+1. 读 WBS 台账 → 确认任务 ID、Context Brief、退出标准、依赖
+2. 更新台账: status=doing
+3. 执行变更 + 格式验证（bash -n / yamllint / json.load）
+4. 一致性验证（Schema↔YAML对齐、交叉引用有效）
+5. 功能验证（脚本可运行、命令可执行）
+6. 自检：跑本文件末尾"完工自检清单"（跳过 TDD 项）
+7. 修完自检 fail 项 → commit
+8. 更新台账: status=done + 附证据
+9. 向主编汇报
 ```
 
 ### 阻塞处理
@@ -53,6 +69,10 @@
 ---
 
 ## TDD 硬规则
+
+> ⚠️ 非代码项目（`project_type: docs` 或 `config`）跳过 TDD。改用格式验证替代。
+
+### 代码项目 (project_type: code) — 标准 TDD
 
 ### RED — 写失败测试
 - 一个测试、一个行为、名字清晰
@@ -89,6 +109,33 @@ npm test path/to/test.test.ts
 ```bash
 git add -A && git commit -m "feat(scope): 简短描述"
 ```
+
+### 非代码项目 (project_type: docs | config) — 格式验证替代
+
+非代码项目不写测试，改用以下格式验证：
+
+```
+1. 格式验证：
+   - Markdown: 无断链、无格式错误
+   - YAML: yamllint 或 python3 -c "import yaml; yaml.safe_load(open('f'))"
+   - JSON: python3 -c "import json; json.load(open('f'))"
+   - Shell: bash -n script.sh
+
+2. 一致性验证：
+   - Schema ↔ YAML 字段对齐
+   - 交叉引用有效（所有文件路径引用指向存在的文件）
+   - 示例数据与 Schema 兼容
+
+3. 功能验证（技能/文档项目）：
+   - 所有脚本在测试项目中可运行
+   - 所有命令示例可执行
+   - 所有模板可填充并生成有效输出
+
+4. Commit:
+   git add -A && git commit -m "feat(scope): 简短描述"
+```
+
+**铁律同代码项目：无验证不标 done。** 只是验证方式从"跑测试"变为"跑格式检查 + 功能验证"。
 
 ---
 

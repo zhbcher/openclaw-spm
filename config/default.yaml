@@ -3,6 +3,9 @@
 # Do NOT commit secrets; use environment variables or gitignored override files.
 
 project:
+  # Project type: code (standard software) | docs (documentation/skills) | config (configuration-only)
+  # Non-code projects skip TDD and use format validation instead
+  project_type: code
   # Execution mode: subagent (one per task) | inline (current session)
   execution_mode: subagent
   # Parallel subagent dispatch for independent tasks
