@@ -6,6 +6,16 @@ description: 数据库设计规范 — Schema设计/索引/迁移/N+1规避。Ag
 
 # SPM Database — 数据库规范
 
+## 自动检测
+
+SPM Phase 2 写 WBS 计划时，检测到数据库/schema/迁移相关任务 → 自动注入本技能的命名/索引/迁移规范。
+
+## 独立使用
+
+不走 SPM 也可以直接说："按 spm-database 规范设计用户表。"
+
+---
+
 ## Schema 设计
 
 ### 命名

@@ -6,6 +6,16 @@ description: 视觉设计规范 — 18种项目类型 × 调性 × 配色/字体
 
 # SPM Design System — 视觉设计规范
 
+## 自动检测
+
+SPM Phase 2 写 WBS 计划时，根据 spec 中的项目类型自动引用本技能，将设计 token 注入到每个 Context Brief 的"关键约束"中。
+
+## 独立使用
+
+不走 SPM 也可以直接用——告诉 Agent："按 spm-design-system 的 Dashboard 类型设计一个数据分析面板。"
+
+---
+
 ## 设计工作流
 
 ```

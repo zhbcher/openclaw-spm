@@ -6,6 +6,16 @@ description: API设计规范 — REST端点/错误码/分页/版本控制。Agen
 
 # SPM API — API 设计规范
 
+## 自动检测
+
+SPM Phase 2 写 WBS 计划时，检测到 API 端点相关任务 → 自动将本技能的 URL/状态码/分页规范注入 Context Brief。
+
+## 独立使用
+
+不走 SPM 也可以直接说："按 spm-api 规范设计用户模块的 REST 接口。"
+
+---
+
 ## URL 设计
 
 ```
