@@ -16,6 +16,19 @@ Execute implementation plan by dispatching a fresh subagent per task. Each subag
 | standard | `SensenovaDeepSeek` | sensenova | regular implementation, tests |
 | strong | `DeepSeekV4Pro` | deepseek | architecture, root-cause, invariants |
 
+**Sub-Skill Auto-Discovery:** Before dispatching any subagent, scan `skills/` directory for applicable sub-skills:
+
+```
+1. Detect project tech stack (package.json → React/Vue/Next, go.mod → Go, Cargo.toml → Rust)
+2. Check skills/ directory for matching sub-skills:
+   - React/Vue/Next project → auto-include skills/spm-frontend/SKILL.md
+   - (future: API project → spm-api, testing focus → spm-testing, design focus → spm-design-system)
+3. If match found → prepend to subagent prompt:
+   "Before implementing, read ~/.openclaw/workspace/spm/skills/spm-frontend/SKILL.md for frontend coding standards."
+```
+
+**Sub-skills never block execution** — if a sub-skill file is missing, the task continues normally. Sub-skills are quality enhancers, not gates.
+
 ```
 # Tier-based dispatch example:
 sessions_spawn(task="...", model=get_model_for_tier(task.model_tier))

@@ -440,28 +440,21 @@ If user says "skip TDD" or "skip review", follow the user. Iron Laws are default
 ## Project Structure
 
 ```
-project-root/
-├── CHECKPOINTS/               # (Optional) Checkpoint templates
-│   ├── PHASE-1-REQUIREMENTS.md
-│   ├── PHASE-2-PLANNING.md
-│   ├── PHASE-3-EXECUTION.md
-│   └── PHASE-5-DELIVERY.md
-├── CHECKLISTS/                # (Optional) Self-review checklists
-│   ├── CODE-COMPLETION.md
-│   └── DEPLOYMENT-READINESS.md
-├── docs/spm/
-│   ├── specs/                 # Design documents
-│   │   └── YYYY-MM-DD-feature-design.md
-│   ├── plans/                 # Implementation plans
-│   │   └── YYYY-MM-DD-feature-plan.md
-│   └── ledger.md              # WBS task ledger (single source of truth)
-├── .worktrees/                # Git worktrees (auto-created)
-├── src/                       # Source code
-├── tests/                     # Test suite
-└── package.json
+openclaw-spm/
+├── SKILL.md                      # SPM 编排器 (14 workflows)
+├── skills/                       # 🆕 子技能 (SPM 自动发现)
+│   └── spm-frontend/             # 前端代码规范
+│       └── SKILL.md
+├── workflows/                    # 14 个工作流
+├── references/                   # 参考文件
+├── subagents/                    # 子代理 prompt 模板
+├── schemas/                      # JSON Schema
+├── templates/                    # 文档模板
+├── scripts/                      # 自动化脚本
+├── examples/                     # 完整示例项目
+├── config/                       # SPM 配置
+└── docs/                         # 设计文档
 ```
-
-**Note:** `CHECKPOINTS/` and `CHECKLISTS/` are part of the optional Quality Enhancements. Copy them from the skill repo or run `scripts/setup-checkpoints.sh` to enable.
 
 ---
 
