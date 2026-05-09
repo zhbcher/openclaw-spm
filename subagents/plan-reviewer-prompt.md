@@ -34,14 +34,17 @@ You are reviewing the WBS implementation plan for **[project name]** against a s
 | Over-small Tasks | Tasks that are trivial (1-line change, no testing needed) → merge into parent |
 | Unclear Boundaries | Tasks with vague descriptions like "implement features" or "fix bugs" |
 
-### 4. Context Brief Quality
+### 4. Context Brief Quality — 🆕 量化评分
 
-| Check | What to Look For |
-|-------|-----------------|
-| Self-contained | Can a fresh agent execute this task without reading ANY other task's details? |
-| Prerequisites | Does Context Brief list what the dependent tasks produce (files/interfaces)? |
-| File Paths | Are exact file paths specified in Context Brief? |
-| Constraints | Are architecture decisions relevant to this task included? |
+| Check | 评分标准 |
+|-------|---------|
+| Self-contained | 0分=需读其他任务 / 1分=部分自包含 / 2分=完全自包含 |
+| Prerequisites | 0分=缺前置产物描述 / 1分=有但不精确 / 2分=精确列出文件+接口 |
+| File paths | 0分=无 / 1分=不完整 / 2分=精确 |
+| Constraints | 0分=无 / 1分=有但模糊 / 2分=精确(含命名/技术选型/数量) |
+| Acceptance | 0分=无 / 1分=有但不可测 / 2分=可验证(有命令或指标) |
+
+**通过线：总分 ≥ 7/10**。低于 7 分的任务在审查报告中标记为 CONDITIONAL，必须修复后重新 dispatch。
 
 ### 5. Anti-Patterns
 

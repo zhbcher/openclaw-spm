@@ -56,7 +56,7 @@ Delta:     +7 tests | 0 regressions | +6% coverage
 
 | 情况 | 处理 |
 |------|------|
-| 覆盖率为 0 | baseline 时项目还没有测试——记录为 N/A，只对比当前结果 |
+| 覆盖率为 0 | baseline 时项目还没有测试——标记为 ⚠️ 高风险（无基线），而非 N/A。在 evidence 中注明 |
 | 回归 > 0 | **STOP**。标记 `blocked`，进入系统调试流程 |
 | 测试数减少 | 确认是否是移除了冗余测试（合理）还是删除了有效测试（违规） |
 | 覆盖率下降 | 标记为 `DONE_WITH_CONCERNS`，在 evidence 中注明 |

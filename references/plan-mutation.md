@@ -113,6 +113,23 @@ Task N → 标记 skipped + 原因"废弃：[具体原因]"
 - 废弃的任务在 Delivery Summary 中列出为"已废弃"
 - 如果引入替代任务，走 Insert 流程
 
+#### Abandon 回滚指引
+
+如果废弃了原方案、切换到新方案后失败，按以下步骤回退：
+
+```
+1. 停止当前执行
+2. 检查 Mutation Log → 找到 abandon 记录 → 获取原任务 ID
+3. 原任务从 skipped 改回 todo（恢复）
+4. 新方案任务标记 skipped + 原因"回退：新方案失败，恢复原方案"
+5. Mutation Log 记录回退操作
+6. 更新所有受影响任务的 Dependencies
+7. 重新运行 checkpoint.sh phase-2 验证依赖
+8. 继续执行原方案
+```
+
+**铁律：abandon 不是永久删除。原任务永远保留在台账中（skipped 状态），随时可恢复。**
+
 ---
 
 ## 依赖验证（每次突变后）

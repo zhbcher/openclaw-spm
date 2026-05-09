@@ -1,5 +1,6 @@
 ---
 name: SPM
+version: 2.0.0
 description: Production-grade software project development skill for OpenClaw. Use when starting new projects, implementing complex features, or executing multi-step development tasks that require structured end-to-end management. Combines Superpowers workflows, enhanced quality gates, and WBS task ledger tracking.
 metadata:
   openclaw:
