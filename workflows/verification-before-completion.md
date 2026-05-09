@@ -62,6 +62,21 @@ Delta:     +7 tests | 0 regressions | +6% coverage
 | 覆盖率下降 | 标记为 `DONE_WITH_CONCERNS`，在 evidence 中注明 |
 
 **铁律：没有 Eval Delta 对比，不能标记任务 `done`。**
+
+## Standardized Verification Report 🆕
+
+Phase 4 结束时，**必须使用标准化模板**输出验证报告，禁止叙述式文字。
+
+模板：`templates/verification-report.md`
+
+7 阶段顺序执行：Build → Types → Lint → Tests → Coverage → Security → Diff
+
+判定：
+- 全 PASS → ✅ READY
+- Coverage < 80% 或其他小问题 → ⚠️ CONDITIONAL
+- Build/Types/Tests 任一 FAIL → ❌ NOT READY
+
+报告保存到 `docs/spm/reviews/YYYY-MM-DD-verification.md`，在 WBS 台账 evidence 列引用。
 ```
 
 ## Common Failures
