@@ -2,73 +2,100 @@
 
 ## Overview
 
-Execute implementation plan by dispatching a fresh subagent per task. Each subagent must update the WBS ledger upon completion. After each task: spec compliance review → code quality review.
+Execute implementation plan by dispatching a fresh subagent per task. Each subagent receives a **cold-start context brief** and a **model tier recommendation**. After each task: spec compliance review → code quality review. All WBS changes tracked via Mutation Log.
 
 **WBS Binding Rule:** Every subagent dispatch MUST update the WBS ledger status. Every subagent return MUST update WBS status + attach evidence.
+
+**Cold-Start Rule:** Every subagent receives the task's Context Brief — they must be able to execute without reading any other task's details.
+
+**Model Routing Rule:** Dispatch subagent at the task's `model_tier` — fast model for boilerplate/config tasks, standard for implementation, strong for architecture/critical tasks.
 
 ## The Process
 
 ```
 For each task from WBS ledger:
-  1. Update WBS: status=doing
-  2. Dispatch implementer subagent with full task text
-  3. Implementer asks questions? Answer them.
-  4. Implementer completes → reports DONE/DONE_WITH_CONCERNS/BLOCKED
-  5. Update WBS: attach evidence output, status=done (or blocked)
-  6. Dispatch spec compliance reviewer
-  7. Issues? → Implementer fixes → Re-review
-  8. Dispatch code quality reviewer
-  9. Issues? → Implementer fixes → Re-review
-  10. Mark task complete in WBS ledger
+  1. Read task: ID, Context Brief, exit_criteria, model_tier
+  2. Update WBS: status=doing
+  3. Build dispatch prompt = Context Brief + full task description + model tier
+  4. Dispatch implementer subagent with context_brief (cold-start compatible)
+  5. Implementer asks questions? Answer them.
+  6. Implementer completes → reports DONE/DONE_WITH_CONCERNS/BLOCKED
+  7. BLOCKED? → Check plan-mutation.md for appropriate mutation (split/insert/skip)
+  8. Update WBS: attach evidence output, status=done (or blocked)
+  9. Dispatch spec compliance reviewer (standard model)
+  10. Issues? → Implementer fixes → Re-review
+  11. Dispatch code quality reviewer (standard model)
+  12. Issues? → Implementer fixes → Re-review
+  13. Mark task complete in WBS ledger
 ```
 
-## Implementer Subagent Prompt
+### Handling BLOCKED Status
+
+When a subagent returns BLOCKED:
+
+1. Analyze the blocker against `references/plan-mutation.md`
+2. If task is too large → **split** mutation
+3. If prerequisite missing → **insert** mutation
+4. If task no longer needed → **skip** mutation
+5. Record all mutations in WBS Mutation Log
+6. If major mutation (split/insert/abandon) → re-trigger adversarial plan review
+
+## Dispatch Prompt Template
+
+Use `subagents/implementer-prompt.md` as the base, and prepend the task's Context Brief:
 
 ```
-You are implementing WBS Task [ID]: [task name]
+## Cold-Start Context
 
-## Task Description
-[FULL TEXT from plan — provide directly, don't make subagent read file]
+{task.context_brief}
 
-## Your Job
-1. Implement exactly what the task specifies
-2. Write tests (TDD: RED → GREEN → REFACTOR)
-3. Verify implementation works
-4. Commit your work
-5. Self-review
-6. Report back
+---
 
-Work from: [directory]
-
-## Report Format
-- Status: DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
-- What you implemented
-- What you tested and test results
-- Files changed
-- Evidence (command output, test results)
+{rest of implementer-prompt.md}
 ```
 
-## Spec Reviewer Prompt
+The implementer gets:
+- **Context Brief** (self-contained cold-start info)
+- **Full task description** (from plan)
+- **Exit criteria** (from WBS)
+- **Model tier** (routing hint for the subagent dispatch)
+- **Work directory** (from project root)
+
+## Review Workflow
+
+After implementation completes:
 
 ```
-You are reviewing WBS Task [ID] for spec compliance.
+1. Spec Reviewer (standard model)
+   - Check code matches spec exactly
+   - Scan for YAGNI violations
+   - Verify all acceptance criteria
+   - Template: subagents/spec-reviewer-prompt.md
 
-1. Does code do EXACTLY what the spec requires?
-2. Any YAGNI violations (features NOT in spec)?
-3. Are all acceptance criteria met?
-
-Output: ✅ or ❌ with file/line references
+2. Code Quality Reviewer (standard model)
+   - Clean code, testing, security, design
+   - Severity: Critical / Important / Minor
+   - Template: subagents/quality-reviewer-prompt.md
 ```
 
-## Code Quality Reviewer Prompt
+Each reviewer gets the task's Context Brief + implementation report.
 
+## Mutation During Execution
+
+If plan needs to change mid-execution:
+
+```bash
+# After mutation recorded in WBS Mutation Log
+./scripts/checkpoint.sh phase-2  # Re-validate plan
+
+# For major mutations (split/insert/abandon):
+# Re-trigger adversarial plan review
 ```
-You are reviewing WBS Task [ID] for code quality.
 
-1. Clean Code: Clear names, no leftovers, focused functions
-2. Testing: Real tests, edge cases, proper assertions
-3. Security: No hardcoded secrets, SQL, unsafe evals
-4. Design: Single responsibility, follows patterns
+See `references/plan-mutation.md` for complete mutation protocols.
 
-Severity: Critical / Important / Minor
-```
+## Parallel Dispatch
+
+For independent tasks (no shared files, no dependency chains), dispatch simultaneously. See `workflows/dispatching-parallel-agents.md`.
+
+**Cold-start compatibility makes parallel dispatch safer** — each agent gets everything it needs in Context Brief.

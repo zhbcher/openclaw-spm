@@ -214,6 +214,13 @@ components:
           type: string
         description:
           type: string
+        context_brief:
+          type: string
+          description: "Self-contained cold-start context for agent execution"
+        model_tier:
+          type: string
+          enum: [fast, standard, strong]
+          description: "Recommended model tier for task execution"
         status:
           type: string
           enum: [todo, doing, done, blocked, skipped]
@@ -262,6 +269,12 @@ components:
           type: string
         description:
           type: string
+        context_brief:
+          type: string
+          description: "Self-contained cold-start context"
+        model_tier:
+          type: string
+          enum: [fast, standard, strong]
         phase:
           type: string
           enum: [requirement, planning, execution, quality, delivery]

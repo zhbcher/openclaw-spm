@@ -132,11 +132,16 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 - Success criteria: [how we verify]
 
 ## WBS
-| ID | Work Package | Dependencies | Exit Criteria | Evidence | Status |
-|----|-------------|---------|---------------|----------|--------|
-| 1  | Setup scaffold | - | Init script runs, tests pass | npm test output | done |
-| 1.1| Install deps | 1 | All deps installed | npm ls | done |
-| 2  | Core feature A | 1 | API returns correct data | curl output | todo |
+| ID | Work Package | Dependencies | Context Brief | Exit Criteria | Evidence | Status |
+|----|-------------|---------|---------------|---------------|----------|--------|
+| 1  | Setup scaffold | - | Cold-start: init project structure, install deps | Init script runs, tests pass | npm test output | done |
+| 1.1| Install deps | 1 | Cold-start: after scaffold ready, npm install all packages | All deps installed | npm ls | done |
+| 2  | Core feature A | 1 | Cold-start: after scaffold, implement API in src/routes/ | API returns correct data | curl output | todo |
+
+## Mutation Log
+| Time | Mutation Type | Affected IDs | Reason | New IDs |
+|------|--------------|-------------|--------|---------|
+| | split / insert / skip / reorder / abandon | | | |
 
 ## Active State
 - Current item:
@@ -190,16 +195,19 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 
 **Sub-flow: Implementation Plan (see workflows/writing-plans.md)**
 1. Decompose spec into bite-sized tasks (2-5 min per step)
-2. Each task has: exact file paths, complete code snippets, exact commands
-3. Map file structure: which files created/modified
-4. Create WBS ledger with all tasks (IDs, dependencies, exit criteria)
-5. Self-review plan (spec coverage, placeholder scan, type consistency)
+2. Write **Context Brief** for each task — self-contained cold-start context
+3. Assign **Model Tier** to each task (fast/standard/strong)
+4. Map file structure: which files created/modified
+5. Create WBS ledger with all tasks (IDs, context brief, dependencies, exit criteria)
+6. Self-review plan (spec coverage, placeholder scan, Context Brief audit)
+7. **🆕 Adversarial Plan Review** — dispatch reviewer subagent against 5-dimension checklist before showing to user (see subagents/plan-reviewer-prompt.md)
 
 **Outputs:**
 - `docs/spm/plans/YYYY-MM-DD-xxx-plan.md`
-- Updated WBS ledger with all task rows
+- Updated WBS ledger with all task rows + context briefs + model tiers
+- `docs/spm/reviews/YYYY-MM-DD-plan-review.md` — adversarial review report
 
-**Phase Gate:** User reviews plan, chooses execution mode:
+**Phase Gate:** User reviews plan + review report, chooses execution mode:
 - **Subagent-Driven** (recommended) — each task dispatched to fresh subagent
 - **Inline Execution** — execute in current session
 
@@ -215,6 +223,8 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 
 **Sub-flow: Task Execution**
 - For **Subagent-Driven**: see `workflows/subagent-driven-development.md`
+  - Each subagent receives **cold-start Context Brief** + **model tier routing**
+  - BLOCKED tasks trigger mutation protocol (see references/plan-mutation.md)
 - For **Inline**: see `workflows/executing-plans.md`
 - For **Parallel Tasks**: see `workflows/dispatching-parallel-agents.md`
 
@@ -222,10 +232,11 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 Every subagent task MUST update the WBS ledger:
 - Before dispatch: set status to `doing`
 - On completion: set status to `done` + attach evidence
-- On block: set status to `blocked` + describe blocker
+- On block: set status to `blocked` + describe blocker → trigger mutation protocol
 
 **Sub-flow: TDD (see workflows/test-driven-development.md)**
 Each implementation slice follows RED → Verify RED → GREEN → Verify GREEN → REFACTOR → Commit
+- **🆕 RED validation accepts compile-time RED** (test references non-existent API → compile failure counts as valid RED)
 
 **Heartbeat: Every 10 minutes**
 Update the heartbeat log in the WBS ledger.
@@ -497,8 +508,9 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 - `workflows/` — Detailed workflow docs for each phase
 - `references/` — Templates, best practices, recovery patterns
 - `references/TASK-EXECUTION.md` — **执行单任务前必读的单一入口**（合并 TDD + Gate Function + WBS 更新规则 + 完工自检）
+- `references/plan-mutation.md` — **🆕 计划突变协议**：split / insert / skip / reorder / abandon 操作规范
 - `schemas/` — JSON schemas for project state, ledger, quality gates
-- `subagents/` — Subagent dispatch prompt templates
+- `subagents/` — Subagent dispatch prompt templates (implementer, spec reviewer, quality reviewer, plan reviewer)
 - `scripts/` — Automation scripts (init, quality check, auto-execute)
 - `templates/` — PRD, plan, review checklist templates
 - `docs/quality-enhancements.md` — **Checkpoint, Checklist, Contract, E2E, Config-as-Code**

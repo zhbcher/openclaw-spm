@@ -9,8 +9,8 @@
 每个任务动手前先问自己：
 
 1. **这个任务的退出标准是什么？**（查 WBS 台账 `exit_criteria` 列）
-2. **它的依赖都 `done` 了吗？**（查 WBS 台账 `depends` 列）
-3. **我需要改哪些文件？**（查 plan 或 task description 的精确路径）
+2. **它的依赖都 `done` 了吗？**（查 WBS 台账 `Dependencies` 列）
+3. **Context Brief 说了什么？**（自包含的冷启动上下文——前置产物、涉及文件、关键约束）
 
 ---
 
@@ -29,7 +29,7 @@
 ## 执行流程（单任务）
 
 ```
-1. 读 WBS 台账 → 确认任务 ID、描述、退出标准、依赖
+1. 读 WBS 台账 → 确认任务 ID、Context Brief、退出标准、依赖
 2. 更新台账: status=doing
 3. TDD: RED（写失败测试）→ Verify RED → GREEN（最小实现）→ Verify GREEN → REFACTOR
 4. 自检：跑本文件末尾"完工自检清单"
@@ -37,6 +37,16 @@
 6. 更新台账: status=done + 附证据（测试输出 / diff / curl 结果）
 7. 向主编汇报（用下方报告模板）
 ```
+
+### 阻塞处理
+
+如果任务阻塞（BLOCKED），按计划突变协议处理：
+- 任务太大 → **split** 拆分
+- 缺前置工作 → **insert** 插入新任务
+- 不再需要 → **skip** 跳过
+- 方向错误 → **abandon** 废弃
+
+所有突变 MUST 记录到 WBS 台账的 Mutation Log。详见 `references/plan-mutation.md`。
 
 ---
 
@@ -47,11 +57,19 @@
 - 运行确认它**失败且原因正确**（功能缺失，不是拼写错误）
 
 ### Verify RED — 强制
+
+**有效的 RED 有两种形式（🆕 取自 ECC tdd-workflow）：**
+
+1. **运行时 RED**：测试编译成功、执行、返回失败——因为功能还没实现
+2. **编译时 RED**：测试引用了不存在的 API/函数/类型 → 编译失败本身就是有效的 RED 信号
+
 ```bash
 npm test path/to/test.test.ts
 ```
 测试直接通过？说明你在测已有功能——改测试。
 测试报错？修错误，跑到它正确失败为止。
+
+**两者都算有效 RED——只要失败是由功能缺失或 bug 导致的，不是由语法错误或错误的测试配置导致的。**
 
 ### GREEN — 最小实现
 写最简代码让测试通过。不加额外功能（YAGNI）。
