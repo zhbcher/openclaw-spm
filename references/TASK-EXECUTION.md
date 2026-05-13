@@ -1,4 +1,4 @@
-# Task Execution — 单任务执行单一入口
+# Task Execution 单任务执行 | Single-Entry Task Execution
 
 > **何时读：执行任何一个 WBS 任务前必读。** 本文件是所有执行规则的合并入口——读完这份就够了。
 

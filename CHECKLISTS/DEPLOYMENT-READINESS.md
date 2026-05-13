@@ -1,4 +1,4 @@
-# Deployment Readiness Checklist
+# Deployment Readiness Checklist 部署就绪
 
 **Project**: {{project_name}}  
 **Target Environment**: {{environment}} (staging / production)  

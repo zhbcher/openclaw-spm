@@ -1,7 +1,7 @@
 ---
 name: SPM
 version: 3.0.0
-description: Production-grade software project development skill for OpenClaw. WBS hash attestation, auto context injection, session recovery, parallel task pointers, and Minimal Mode. Use when starting new projects, implementing complex features, or executing multi-step development tasks that require structured end-to-end management.
+description: Production-grade software project development skill for OpenClaw. WBS hash attestation, auto context injection, session recovery, parallel task pointers, and Minimal Mode. 生产级 AI 编程项目管理技能——WBS 哈希认证、上下文自动注入、会话恢复、并行任务指针、极简模式。Use when starting new projects or executing multi-step development tasks.
 metadata:
   openclaw:
     emoji: "🚀"

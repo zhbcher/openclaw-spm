@@ -1,4 +1,4 @@
-# Checkpoint: Phase 1 — Requirements Alignment
+# Phase 1 Checkpoint 需求对齐 | Requirements Alignment
 
 **Project**: {{project_name}}  
 **Checkpoint**: Phase 1 — Requirements  

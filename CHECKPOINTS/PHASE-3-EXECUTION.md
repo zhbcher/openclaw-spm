@@ -1,4 +1,4 @@
-# Checkpoint: Phase 3 — Execution Milestone
+# Phase 3 Checkpoint 执行里程碑 | Execution Milestone
 
 **Project**: {{project_name}}  
 **Checkpoint**: Phase 3 — Execution (Milestone: {{milestone_name}})  

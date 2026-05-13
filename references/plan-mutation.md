@@ -1,4 +1,4 @@
-# Plan Mutation Protocol — 计划突变协议
+# Plan Mutation Protocol 计划突变 | Audit Trail for WBS Changes
 
 WBS 计划确认后仍可变更，但**必须留痕**。本协议定义了 5 种突变操作及其审计要求。
 

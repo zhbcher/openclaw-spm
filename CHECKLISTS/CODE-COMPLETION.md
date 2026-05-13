@@ -1,4 +1,4 @@
-# Code Completion Self-Review Checklist
+# Code Completion Checklist 完工自检 | Self-Review
 
 **Feature**: {{feature_name}}  
 **Branch**: {{branch_name}}  

@@ -1,4 +1,4 @@
-# Checkpoint: Phase 2 — Planning Alignment
+# Phase 2 Checkpoint 规划对齐 | Planning Alignment
 
 **Project**: {{project_name}}  
 **Checkpoint**: Phase 2 — Planning  

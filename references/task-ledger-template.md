@@ -1,4 +1,4 @@
-# WBS Task Ledger Template
+# WBS Task Ledger Template 任务台账模板
 
 Create at `docs/spm/ledger.md` before starting substantive execution.
 

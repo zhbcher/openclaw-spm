@@ -1,4 +1,4 @@
-# Recovery Patterns
+# Recovery Patterns 中断恢复 | Interruption # Recovery Patterns Recovery
 
 ## Recovery Boundary Selection
 
