@@ -1,7 +1,7 @@
 ---
 name: SPM
-version: 2.0.0
-description: Production-grade software project development skill for OpenClaw. Use when starting new projects, implementing complex features, or executing multi-step development tasks that require structured end-to-end management. Combines Superpowers workflows, enhanced quality gates, and WBS task ledger tracking.
+version: 3.0.0
+description: Production-grade software project development skill for OpenClaw. WBS hash attestation, auto context injection, session recovery, parallel task pointers, and Minimal Mode. Use when starting new projects, implementing complex features, or executing multi-step development tasks that require structured end-to-end management.
 metadata:
   openclaw:
     emoji: "🚀"
@@ -20,7 +20,18 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 - **PM enhancements**: Soul-searching protocol, assumption documentation, safe sandbox (/freeze & /guard), three-tier quality gates, project scaffolding, deployment pipeline
 - **WBS Executor**: Structured task ledger with exit criteria, evidence tracking, heartbeat logging, interruption recovery, delivery summary
 
-**Core Philosophy:** SPM is an orchestrator, not a monolith. Each phase triggers the right workflow. The WBS task ledger is the single source of truth for tracking.
+**Core Philosophy:** SPM is an orchestrator, not a monolith. Each phase triggers the right workflow. The WBS task ledger is the single source of truth for tracking — now protected by hash attestation and auto-injected into context.
+
+### 🆕 v3.0 New Features
+
+| Feature | Description | Priority |
+|---------|-------------|----------|
+| **WBS Hash Attestation** | SHA-256 integrity protection; tampered ledgers auto-detected | 🔒 Security |
+| **Hook Auto-Injection** | Active tasks auto-injected into context before every tool call | 🤖 Automation |
+| **Session Recovery** | Auto-generated recovery reports from heartbeat logs | 🔄 Resilience |
+| **Parallel Task Pointers** | `.active_ledger` symlink + `switch-ledger.sh` for multi-task isolation | 📂 Multi-task |
+| **SPM Minimal Mode** | 5-rule lightweight mode for <10 task projects | 🏃 Quick Start |
+| **Template/Script Separation** | Clear distinction: user-project files vs skill internals | 📋 UX |
 
 ## When to Use
 
@@ -538,3 +549,81 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 | Git Worktree | `workflows/using-git-worktrees.md` | — |
 
 > **关键**：Phase 3 执行单任务时，`references/TASK-EXECUTION.md` 是唯一必读——它合并了 TDD 铁律 + Gate Function + WBS 更新规则 + 完工自检清单。不要再跳转多个文件。
+
+---
+
+## 🆕 v3.0 Scripts Reference
+
+| Script | Purpose | When to Use |
+|--------|---------|-------------|
+| `scripts/init-spm.sh` | Initialize SPM project structure | New project setup |
+| `scripts/attest-wbs.sh` | Generate SHA-256 hash of WBS Ledger | After each WBS update |
+| `scripts/verify-wbs.sh` | Verify WBS Ledger integrity | Before trusting WBS content |
+| `scripts/inject-wbs-context.py` | Inject active tasks into agent context | Hook: PreToolUse |
+| `scripts/session-recovery.py` | Generate session recovery report | After interruption, returning to project |
+| `scripts/switch-ledger.sh <name>` | Switch between multiple WBS ledgers | Multi-task parallel work |
+
+### Hook Configuration (Recommended)
+
+Add to `openclaw.json` SPM plugin config to auto-inject WBS state:
+
+```json
+{
+  "hooks": {
+    "preToolUse": {
+      "command": "python3 scripts/inject-wbs-context.py",
+      "maxChars": 1500
+    }
+  }
+}
+```
+
+**Integrity check** before injection:
+```json
+{
+  "hooks": {
+    "preToolUse": {
+      "command": "bash scripts/verify-wbs.sh && python3 scripts/inject-wbs-context.py",
+      "maxChars": 1500
+    }
+  }
+}
+```
+
+---
+
+## 🏃 SPM Modes
+
+### Full Mode (Default)
+5-phase lifecycle, 13 workflows, 3-tier quality gates, subagent dispatch, TDD.
+
+### Minimal Mode
+5 rules for <10 task projects. See `docs/spm-minimal-mode.md`.
+
+Switch: `/spm:mode minimal` or `/spm:mode full`
+
+---
+
+## 📁 Project Structure (v3.0)
+
+```
+spm/
+├── SKILL.md           ← Skill definition (do not copy)
+├── UPGRADE.md         ← Version migration guide
+├── scripts/           ★ User runs or auto-triggers
+│   ├── init-spm.sh
+│   ├── attest-wbs.sh
+│   ├── verify-wbs.sh
+│   ├── inject-wbs-context.py
+│   ├── session-recovery.py
+│   └── switch-ledger.sh
+├── templates/         ★ User copies to project
+│   ├── wbs-ledger.md          → docs/spm/ledger.md
+│   ├── design-doc.md          → docs/spm/specs/
+│   ├── plan-doc.md            → docs/spm/plans/
+│   └── checkpoint.md          → docs/spm/checkpoints/
+├── workflows/         ← Agent reference
+├── subagents/         ← Agent reference
+├── references/        ← Agent reference
+└── CHECKLISTS/        ← Quality assurance
+```

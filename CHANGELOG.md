@@ -2,6 +2,29 @@
 
 All notable changes to SPM will be documented in this file.
 
+## [3.0.0] — 2026-05-13
+
+### Added
+- **WBS Hash Attestation**: SHA-256 integrity protection (`scripts/attest-wbs.sh`, `scripts/verify-wbs.sh`)
+- **Hook Auto-Injection**: Active tasks auto-injected into context via `scripts/inject-wbs-context.py`
+- **Session Recovery**: Auto-generated recovery reports from `scripts/session-recovery.py`
+- **Parallel Task Pointers**: `.active_ledger` symlink + `scripts/switch-ledger.sh` for multi-task isolation
+- **SPM Minimal Mode**: 5-rule lightweight mode for <10 task projects (`docs/spm-minimal-mode.md`)
+- **Template/Script Physical Separation**: Clear `templates/` → project copy mapping
+- **UPGRADE.md**: Version migration guide
+- **COMMUNITY.md**: Community showcase and extension registry
+- **---BEGIN/END WBS DATA---**: Standardized delimiters for safe context injection
+
+### Changed
+- SKILL.md: Updated to v3.0.0 with new features documentation
+- Task Ledger Template: Added hash attestation notice and Resume Point column
+- README: Added v3.0 features to core capabilities list
+
+### Security
+- WBS Ledger now protected by hash attestation
+- Tampered ledgers auto-detected with clear warnings
+- Injection blocked when hash mismatch detected
+
 ## [2.0.0] — 2026-05-09
 
 ### Added

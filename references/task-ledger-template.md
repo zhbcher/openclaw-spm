@@ -51,6 +51,9 @@ Allowed statuses: `todo`, `doing`, `done`, `blocked`, `skipped`
 
 ## Heartbeat Log
 
+> ⚠️ SPM Integrity: Protected by `bash scripts/verify-wbs.sh`
+> Run `bash scripts/attest-wbs.sh` after each WBS update.
+
 | Time | Active item | Last completed | Evidence added | Resume point |
 |------|-----------|---------------|----------------|-------------|
 | YYYY-MM-DD HH:MM | | | | |

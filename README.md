@@ -25,6 +25,11 @@ SPM 是一个完整的 OpenClaw 技能，能把自然语言需求变成生产级
 
 ### 🎯 核心能力
 
+- **🆕 WBS 哈希认证** — SHA-256 防篡改保护（`attest-wbs.sh` / `verify-wbs.sh`）
+- **🆕 Hook 自动注入** — 活跃任务自动注入上下文（`inject-wbs-context.py`）
+- **🆕 会话恢复** — 自动生成恢复报告（`session-recovery.py`）
+- **🆕 并行任务指针** — `.active_ledger` 多任务无冲突切换
+- **🆕 SPM 极简模式** — 5 条规则，小项目快速上手
 - **13 个 Superpowers 工作流** — 头脑风暴、TDD、子代理开发、代码审查、系统调试、Git Worktree
 - **5 阶段生命周期** — 需求 → 规划 → 执行 → 质量 → 交付
 - **WBS 任务台账** — 结构化任务跟踪，含退出标准、证据、心跳、中断恢复
