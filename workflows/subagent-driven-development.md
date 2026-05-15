@@ -34,23 +34,42 @@ Execute implementation plan by dispatching a fresh subagent per task. Each subag
 sessions_spawn(task="...", model=get_model_for_tier(task.model_tier))
 ```
 
+## Heartbeat
+
+Subagent execution can run for extended periods without visible progress. To support session recovery and progress tracking:
+
+**Every subagent dispatch → MUST:** update heartbeat log with subagent session ID and expected model.
+**Every subagent return → MUST:** update heartbeat log with completion status and evidence.
+**Idle wait > 5 min →** write a heartbeat entry noting what we're waiting for.
+
+Heartbeat table format:
+```
+| Time | Active | Completed | Evidence | Resume Point |
+|------|--------|-----------|----------|-------------|
+| HH:MM | Subagent T2 (step35) | T1 spec review done | review passed | T2 subagent session |
+```
+
 ## The Process
 
 ```
 For each task from WBS ledger:
   1. Read task: ID, Context Brief, exit_criteria, model_tier
   2. Update WBS: status=doing
-  3. Build dispatch prompt = Context Brief + full task description + model tier
-  4. Dispatch implementer subagent with context_brief (cold-start compatible)
-  5. Implementer asks questions? Answer them.
-  6. Implementer completes → reports DONE/DONE_WITH_CONCERNS/BLOCKED
-  7. BLOCKED? → Check plan-mutation.md for appropriate mutation (split/insert/skip)
-  8. Update WBS: attach evidence output, status=done (or blocked)
-  9. Dispatch spec compliance reviewer (standard model)
-  10. Issues? → Implementer fixes → Re-review
-  11. Dispatch code quality reviewer (standard model)
-  12. Issues? → Implementer fixes → Re-review
-  13. Mark task complete in WBS ledger
+  3. **Heartbeat: log subagent dispatch**
+  4. Build dispatch prompt = Context Brief + full task description + model tier
+  5. Dispatch implementer subagent with context_brief (cold-start compatible)
+  6. **sessions_yield — wait with heartbeat:** if wait > 5 min without return, write heartbeat entry
+  7. Implementer asks questions? Answer them.
+  8. Implementer completes → reports DONE/DONE_WITH_CONCERNS/BLOCKED
+  9. BLOCKED? → Check plan-mutation.md for appropriate mutation (split/insert/skip)
+  10. **Heartbeat: log subagent return + evidence**
+  11. Update WBS: attach evidence output, status=done (or blocked)
+  12. Dispatch spec compliance reviewer (standard model)
+  13. Issues? → Implementer fixes → Re-review
+  14. Dispatch code quality reviewer (standard model)
+  15. Issues? → Implementer fixes → Re-review
+  16. **Heartbeat: log review results**
+  17. Mark task complete in WBS ledger
 ```
 
 ### Handling BLOCKED Status

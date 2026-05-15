@@ -18,6 +18,22 @@ BEFORE claiming any status or expressing satisfaction:
 5. ONLY THEN: Make the claim
 
 Skip any step = lying, not verifying
+```
+
+## Heartbeat
+
+Long-running verifications (full test suite, build, type check) should not be silent:
+
+- **Verification command starts →** log to heartbeat: what's running, expected duration
+- **Verification completes →** log result: pass/fail, exit code, key metrics
+- **Verification > 5 min →** update heartbeat every 2 min with progress
+
+```
+| Time | Active | Completed | Evidence | Resume Point |
+|------|--------|-----------|----------|-------------|
+| HH:MM | npm test running | — | — | test output pending |
+| HH:MM | — | npm test done | 54/54 pass | ready for review |
+```
 
 ## Eval Delta — 执行前后对比 🆕
 
