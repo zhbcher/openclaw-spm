@@ -16,7 +16,7 @@ allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "s
 
 SPM is a comprehensive skill for software project development in OpenClaw. It integrates:
 
-- **Superpowers** (20 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, Ralph Loop auto-retry, hashline edit verification, comment checker, preemptive compaction, todo enforcement, deep context initialization, Prometheus interview mode, and more
+- **Superpowers** (21 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, Ralph Loop auto-retry, hashline edit verification, comment checker, preemptive compaction, todo enforcement, deep context initialization, Prometheus interview mode, AST-Grep + LSP, and more
 - **PM enhancements**: Soul-searching protocol, assumption documentation, safe sandbox (/freeze & /guard), three-tier quality gates, project scaffolding, deployment pipeline
 - **WBS Executor**: Structured task ledger with exit criteria, evidence tracking, heartbeat logging, interruption recovery, delivery summary
 
@@ -342,6 +342,7 @@ Included in Code Review Stage 2. Auto-detect AI-flavored comments:
 
 **Sub-flow: Systematic Debugging** (if tests fail) — see `workflows/systematic-debugging.md`
 4-phase root cause tracing: Error Capture → Hypothesis → Evidence → Fix & Verify
+- **🆕 推荐使用 AST-Grep**: 查找所有调用点和影响范围（`sg -p "pattern" --json`），替代脆弱的 grep 文本搜索（见 `workflows/ast-grep-lsp.md`）
 
 **Outputs:**
 - Code review report
@@ -629,7 +630,7 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 | Phase 0 外部研究 | `workflows/external-research.md` | — |
 | Phase 1 需求 | `workflows/brainstorming.md` | `templates/prd-template.md` |
 | Phase 2 规划 | `workflows/writing-plans.md` + `references/task-ledger-template.md` | `schemas/task-ledger.schema.json` |
-| Phase 3 执行（每任务） | **`references/TASK-EXECUTION.md`** 单一入口 | `workflows/test-driven-development.md`（卡壳时） `workflows/hashline-edit-verification.md`（编辑后） |
+| Phase 3 执行（每任务） | **`references/TASK-EXECUTION.md`** 单一入口 | `workflows/test-driven-development.md`（卡壳时） `workflows/hashline-edit-verification.md`（编辑后） `workflows/ast-grep-lsp.md`（重构/调试时） |
 | Phase 3 子代理调度 | `workflows/subagent-driven-development.md` + `subagents/implementer-prompt.md` | `subagents/spec-reviewer-prompt.md` + `subagents/quality-reviewer-prompt.md` |
 | Phase 3 并行 | `workflows/dispatching-parallel-agents.md` | — |
 | Phase 3→4 门控 | `workflows/todo-enforcement.md` | — |
