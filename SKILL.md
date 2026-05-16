@@ -16,7 +16,7 @@ allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "s
 
 SPM is a comprehensive skill for software project development in OpenClaw. It integrates:
 
-- **Superpowers** (18 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, Ralph Loop auto-retry, hashline edit verification, comment checker, preemptive compaction, todo enforcement, and more
+- **Superpowers** (19 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, Ralph Loop auto-retry, hashline edit verification, comment checker, preemptive compaction, todo enforcement, deep context initialization, and more
 - **PM enhancements**: Soul-searching protocol, assumption documentation, safe sandbox (/freeze & /guard), three-tier quality gates, project scaffolding, deployment pipeline
 - **WBS Executor**: Structured task ledger with exit criteria, evidence tracking, heartbeat logging, interruption recovery, delivery summary
 
@@ -55,15 +55,15 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
                               │
         ┌─────────────────────┼─────────────────────┐
         ▼                     ▼                     ▼
-┌───────────────┐   ┌───────────────┐   ┌──────────────────┐
-│  REQUIREMENT   │   │   PLANNING    │   │    EXECUTION     │
-│ ─────────────  │   │  ──────────   │   │   ────────────   │
-│ • Brainstorming│   │ • Write Plan  │   │ • Git Worktree   │
-│ • Soul-Search  │   │ • WBS Ledger  │   │ • TDD Cycle      │
-│ • Design Doc   │   │ • Review Plan │   │ • Subagent Dev   │
-│ • Assumptions  │   │ • Dependencies│   │ • Parallel Tasks │
-│                │   │               │   │ • Hashline Verify│
-└───────┬───────┘   └───────┬───────┘   └────────┬─────────┘
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐   ┌──────────────────┐
+│  PHASE 0      │   │  REQUIREMENT   │   │   PLANNING    │   │    EXECUTION     │
+│ ───────────── │   │ ─────────────  │   │  ──────────   │   │   ────────────   │
+│ • Deep Ctx    │   │ • Brainstorming│   │ • Write Plan  │   │ • Git Worktree   │
+│   Init        │   │ • Soul-Search  │   │ • WBS Ledger  │   │ • TDD Cycle      │
+│ • context-map │   │ • Design Doc   │   │ • Review Plan │   │ • Subagent Dev   │
+│   .md         │   │ • Assumptions  │   │ • Dependencies│   │ • Parallel Tasks │
+│               │   │               │   │               │   │ • Hashline Verify│
+└───────┬───────┘   └───────┬───────┘   └───────┬───────┘   └────────┬─────────┘
         └───────────────────┼────────────────────┘
                             ▼
 ┌───────────────┐   ┌───────────────┐   ┌──────────────────┐
@@ -92,11 +92,20 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
-│  PHASE 1: REQUIREMENT                          PHASE 2: PLANNING  │
-│  ┌────────────┐  ┌────────────┐              ┌──────────┐        │
-│  │Brainstorm  │→ │Design Doc  │──Manual──▶  │WBS Plan  │         │
-│  │(灵魂拷问)  │  │(明确假设)  │  Review     │(任务分解)│         │
-│  └────────────┘  └────────────┘              └────┬─────┘        │
+│  PHASE 0: CONTEXT INIT [NEW]            PHASE 1: REQUIREMENT     │
+│  ┌──────────────────────┐              ┌────────────┐            │
+│  │ Deep Context Init    │──Auto──────▶ │Brainstorm  │→           │
+│  │ (context-map.md)     │              │(灵魂拷问)  │            │
+│  └──────────────────────┘              └──────┬─────┘            │
+│                                               │                   │
+└───────────────────────────────────────────────┼───────────────────┘
+                                                 │
+┌────────────────────────────────────────────────┼───────────────────┐
+│  PHASE 1: REQUIREMENT (cont.)   PHASE 2: PLANNING                 │
+│  ┌────────────┐                ┌──────────┐                       │
+│  │Design Doc  │──Manual──────▶ │WBS Plan  │                       │
+│  │(明确假设)  │  Review        │(任务分解)│                       │
+│  └────────────┘                └────┬─────┘                       │
 └────────────────────────────────────────────────────┼──────────────┘
                                                       │
 ┌─────────────────────────────────────────────────────┼──────────────┐
@@ -194,6 +203,21 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 ---
 
 ## Workflow by Phase
+
+### Phase 0: Deep Context Initialization (Auto — before Phase 1)
+
+**Trigger:** SPM detects no `docs/spm/context-map.md` OR its SHA-256 hash mismatches.
+
+**Sub-flow: Deep Context Init (see workflows/deep-context-initialization.md)**
+1. Scan project structure (directories, file distribution, entry points, configs)
+2. Read key files (package.json, README, existing AGENTS.md)
+3. Generate `docs/spm/context-map.md` — single-file project knowledge base (50-150 lines)
+4. SHA-256 hash protect → `docs/spm/.context-map.hash`
+5. Subsequent phases inject relevant sections into context (not full file)
+
+**Skip conditions:** Single-file fix, established project with valid context-map hash.
+
+---
 
 ### Phase 1: Requirement (Manual — User Review Required)
 
@@ -569,6 +593,7 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 
 - `workflows/` — Detailed workflow docs for each phase (18 workflows)
 - `workflows/ralph-loop.md` — **🆕 自动闭环重试**：验证失败→策略切换→最多3轮→上报
+- `workflows/deep-context-initialization.md` — **🆕 深度上下文扫描**：项目全貌→context-map.md→分阶段注入
 - `workflows/hashline-edit-verification.md` — **🆕 编辑后自动校验**：git diff → 确认改动精确
 - `workflows/comment-checker.md` — **🆕 去AI味注释审查**：检测冗余注释→自动清理
 - `workflows/todo-enforcement.md` — **🆕 任务完成硬件拦截**：WBS状态/Evidence/Criteria三重检查
@@ -592,6 +617,7 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 
 | 阶段 | 必读（每次都看） | 一次性看完 / 按需查 |
 |------|-----------------|-------------------|
+| Phase 0 上下文 | `workflows/deep-context-initialization.md` | — |
 | Phase 0 外部研究 | `workflows/external-research.md` | — |
 | Phase 1 需求 | `workflows/brainstorming.md` | `templates/prd-template.md` |
 | Phase 2 规划 | `workflows/writing-plans.md` + `references/task-ledger-template.md` | `schemas/task-ledger.schema.json` |
