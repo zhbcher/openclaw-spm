@@ -16,7 +16,7 @@ allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "s
 
 SPM is a comprehensive skill for software project development in OpenClaw. It integrates:
 
-- **Superpowers** (13 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, and more
+- **Superpowers** (18 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, Ralph Loop auto-retry, hashline edit verification, comment checker, preemptive compaction, todo enforcement, and more
 - **PM enhancements**: Soul-searching protocol, assumption documentation, safe sandbox (/freeze & /guard), three-tier quality gates, project scaffolding, deployment pipeline
 - **WBS Executor**: Structured task ledger with exit criteria, evidence tracking, heartbeat logging, interruption recovery, delivery summary
 
@@ -62,6 +62,7 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 │ • Soul-Search  │   │ • WBS Ledger  │   │ • TDD Cycle      │
 │ • Design Doc   │   │ • Review Plan │   │ • Subagent Dev   │
 │ • Assumptions  │   │ • Dependencies│   │ • Parallel Tasks │
+│                │   │               │   │ • Hashline Verify│
 └───────┬───────┘   └───────┬───────┘   └────────┬─────────┘
         └───────────────────┼────────────────────┘
                             ▼
@@ -71,7 +72,8 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 │ • Verification │   │ • Finish Brch │   │ • WBS Ledger     │
 │ • Code Review  │   │ • Deploy (opt)│   │ • Heartbeat Log  │
 │ • 3-Tier Gates │   │ • Delivery    │   │ • State Tracking │
-│ • Debugging    │   │ • Cleanup     │   │ • Recovery       │
+│ • Ralph Loop   │   │ • Cleanup     │   │ • Recovery       │
+│ • Comment Chk  │   │               │   │ • Preemptive Cmp │
 └───────┬───────┘   └───────┬───────┘   └──────────────────┘
         └───────────────────┼────────────────────┘
                             ▼
@@ -82,6 +84,7 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
               │  Spec Reviewer          │
               │  Code Quality Reviewer  │
               │  Parallel Subagents     │
+              │  Todo Enforcement Gate  │
               └─────────────────────────┘
 ```
 
@@ -100,18 +103,29 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 │  PHASE 3: EXECUTION (Automated after Manual Start) │              │
 │                                                     ▼              │
 │  ┌──────────┐  ┌──────────┐  ┌────────────┐  ┌─────────────┐    │
-│  │Worktree  │→ │Subagent  │→ │Parallel    │→ │TDD + Commit │    │
-│  │Setup     │  │Task Exec │  │Subagents   │  │Verify       │    │
+│  │Worktree  │→ │Subagent  │→ │Parallel    │→ │Hashline    │    │
+│  │Setup     │  │Task Exec │  │Subagents   │  │Edit Verify │    │
 │  └──────────┘  └──────────┘  └────────────┘  └──────┬──────┘    │
 │                                                      │           │
 └──────────────────────────────────────────────────────┼───────────┘
                                                        │
 ┌──────────────────────────────────────────────────────┼───────────┐
 │  PHASE 4: QUALITY                PHASE 5: DELIVERY   │           │
+│                                                       │           │
+│  ┌──────────────────────────────────────────────────┐ │           │
+│  │ TODO ENFORCEMENT GATE ──────────────────────────▶│ │           │
+│  │ (WBS状态✓  Evidence✓  Criteria匹配✓)             │ │           │
+│  └──────────────────────────────────────────────────┘ │           │
 │  ┌────────────┐  ┌────────────┐  ┌──────────────┐   │           │
 │  │Verify Gate │→ │Code Review │→ │Finish Branch │   │           │
 │  │(3-Tier)    │  │(3-Stage)   │  │Deploy (opt)  │   │           │
-│  └────────────┘  └────────────┘  └──────┬───────┘   │           │
+│  │+CommentChk │  │+CommentChk │  └──────┬───────┘   │           │
+│  └────────────┘  └────────────┘         │           │           │
+│       │ 验证失败                        │           │           │
+│       ▼                                 │           │           │
+│  ┌────────────┐                         │           │           │
+│  │ Ralph Loop │──→ 自动重试(≤3次)      │           │           │
+│  └────────────┘                         │           │           │
 │                                          │           │           │
 │  ┌────────────────────────────────────┐ │           │           │
 │  │ DELIVERY SUMMARY + WBS CLOSEOUT    │◀┘           │           │
@@ -124,6 +138,9 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 │  │ WBS Ledger   │  │ Heartbeat    │  │ State Tracking       │   │
 │  │ (Single SOT) │  │ (10 min)     │  │ (project-state.json) │   │
 │  └──────────────┘  └──────────────┘  └──────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────────────┐ │
+│  │ Preemptive Compaction — 用量>60%→轻度 >80%→中度 >90%→重度  │ │
+│  └──────────────────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -248,6 +265,16 @@ Every subagent task MUST update the WBS ledger:
 - On completion: set status to `done` + attach evidence
 - On block: set status to `blocked` + describe blocker → trigger mutation protocol
 
+**Mandatory: Hashline Edit Verification (see workflows/hashline-edit-verification.md)**
+After every `edit`/`write` operation: git diff → verify oldText removed, newText present, no side effects → attach to WBS evidence.
+
+**Mandatory: Todo Enforcement Gate (see workflows/todo-enforcement.md)**
+Before advancing to Phase 4, every subagent task must pass:
+- WBS status is `done`/`blocked`/`skipped`
+- Evidence column is non-empty and matches exit criteria
+- No dangling file references
+Blocked tasks must trigger Mutation Protocol before proceeding.
+
 **Sub-flow: TDD (see workflows/test-driven-development.md)**
 Each implementation slice follows RED → Verify RED → GREEN → Verify GREEN → REFACTOR → Commit
 - **🆕 RED validation accepts compile-time RED** (test references non-existent API → compile failure counts as valid RED)
@@ -264,10 +291,22 @@ Iron Law: NO completion claims without fresh verification evidence.
 - **🆕 Eval Delta**: 每个任务完成前必须做 baseline vs current 对比（测试数、覆盖率、回归检查）
 - **🆕 Standardized Report**: 使用 `templates/verification-report.md` 模板，7 阶段顺序验证，输出 YES/NO 网格
 
+**Sub-flow: Ralph Loop Auto-Retry (see workflows/ralph-loop.md)**
+Verification failure → auto-retry with strategy change (max 3 rounds):
+- Strategy A: pinpoint fix (locate error → repair)
+- Strategy B: rollback + alternative implementation
+- Strategy C: split task into smaller sub-tasks
+- 3 failures → escalate to user with root cause + attempted strategies
+
 **Sub-flow: Three-Stage Code Review (see workflows/code-review.md)**
 1. **Stage 1: Spec Compliance** — Code matches spec exactly (no YAGNI)
 2. **Stage 2: Engineering Quality** — Tests, security, clean code
 3. **Stage 3: Final Review** — Full suite pass, integration verified
+
+**Sub-flow: Comment Checker (see workflows/comment-checker.md)**
+Included in Code Review Stage 2. Auto-detect AI-flavored comments:
+- Redundant: function-name-repeating, obvious-operations, pseudo-TODOs, template-residue
+- Report grouping: redundant / keep / uncertain → auto-clean if ≥3 redundant
 
 **Sub-flow: Three-Tier Quality Gates (see workflows/quality-gates.md)**
 - **Always do:** Run tests, follow naming, validate inputs
@@ -280,6 +319,7 @@ Iron Law: NO completion claims without fresh verification evidence.
 **Outputs:**
 - Code review report
 - Quality gate results (passed/failed per check)
+- Comment checker report
 - Updated WBS ledger (tasks moved to done with evidence)
 
 ---
@@ -302,6 +342,17 @@ Write WBS ledger's Delivery Summary section:
 - Remaining blockers/skipped items
 - Residual risks
 - Final handoff note
+
+---
+
+## Preemptive Compaction (Tracking Layer)
+
+**Sub-flow: Preemptive Compaction (see workflows/preemptive-compaction.md)**
+Long sessions auto-monitor context window usage:
+- **>60%**: 轻度压缩（清理重复WBS片段、合并heartbeat）
+- **>80%**: 中度压缩（缩写子代理输出、压缩文件读取记录）
+- **>90%**: 重度压缩（归档已完成任务为摘要、启动新子会话）
+- 压缩后必须在 WBS Active State 写入完整 Resume Point
 
 ---
 
@@ -408,11 +459,11 @@ Browser automation tasks follow the same TDD and evidence requirements as code t
 
 **Law 2: No production code without a failing test first.** TDD Iron Law — if you wrote code before test, delete it and start over.
 
-**Law 3: No completion claims without fresh verification evidence.** Run the exact verification command this turn. Show output. THEN claim.
+**Law 3: No completion claims without fresh verification evidence.** Run the exact verification command this turn. Show output. THEN claim. *(Enforced by: Ralph Loop + Todo Enforcement)*
 
 **Law 4: No fixes without root cause investigation.** Symptom fixes are failure. Complete Phase 1-3 of Systematic Debugging before any fix.
 
-**Law 5: No WBS `done` without evidence.** File diffs, test output, command results — something verifiable.
+**Law 5: No WBS `done` without evidence.** File diffs, test output, command results — something verifiable. *(Enforced by: Hashline Edit Verification + Todo Enforcement)*
 
 ---
 
@@ -516,7 +567,12 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 
 ## See Also
 
-- `workflows/` — Detailed workflow docs for each phase (14 workflows)
+- `workflows/` — Detailed workflow docs for each phase (18 workflows)
+- `workflows/ralph-loop.md` — **🆕 自动闭环重试**：验证失败→策略切换→最多3轮→上报
+- `workflows/hashline-edit-verification.md` — **🆕 编辑后自动校验**：git diff → 确认改动精确
+- `workflows/comment-checker.md` — **🆕 去AI味注释审查**：检测冗余注释→自动清理
+- `workflows/todo-enforcement.md` — **🆕 任务完成硬件拦截**：WBS状态/Evidence/Criteria三重检查
+- `workflows/preemptive-compaction.md` — **🆕 上下文预压缩**：3级自动压缩+恢复点写入
 - `workflows/external-research.md` — **🆕 外部资源分析**：结构化对比 + 采纳清单
 - `references/` — Templates, best practices, recovery patterns
 - `references/TASK-EXECUTION.md` — **执行单任务前必读的单一入口**（合并 TDD + Gate Function + WBS 更新规则 + 完工自检）
@@ -539,13 +595,15 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 | Phase 0 外部研究 | `workflows/external-research.md` | — |
 | Phase 1 需求 | `workflows/brainstorming.md` | `templates/prd-template.md` |
 | Phase 2 规划 | `workflows/writing-plans.md` + `references/task-ledger-template.md` | `schemas/task-ledger.schema.json` |
-| Phase 3 执行（每任务） | **`references/TASK-EXECUTION.md`** 单一入口 | `workflows/test-driven-development.md`（卡壳时） |
+| Phase 3 执行（每任务） | **`references/TASK-EXECUTION.md`** 单一入口 | `workflows/test-driven-development.md`（卡壳时） `workflows/hashline-edit-verification.md`（编辑后） |
 | Phase 3 子代理调度 | `workflows/subagent-driven-development.md` + `subagents/implementer-prompt.md` | `subagents/spec-reviewer-prompt.md` + `subagents/quality-reviewer-prompt.md` |
 | Phase 3 并行 | `workflows/dispatching-parallel-agents.md` | — |
-| Phase 4 质量 | `workflows/verification-before-completion.md` + `workflows/code-review.md` | `workflows/quality-gates.md` + `CHECKLISTS/CODE-COMPLETION.md` |
+| Phase 3→4 门控 | `workflows/todo-enforcement.md` | — |
+| Phase 4 质量 | `workflows/verification-before-completion.md` + `workflows/code-review.md` + `workflows/comment-checker.md` | `workflows/quality-gates.md` + `CHECKLISTS/CODE-COMPLETION.md` |
+| Phase 4 验证失败 | `workflows/ralph-loop.md` | — |
 | Phase 4 调试 | `workflows/systematic-debugging.md` | — |
 | Phase 5 交付 | `workflows/finishing-a-development-branch.md` | `workflows/shipping-and-launch.md` + `CHECKLISTS/DEPLOYMENT-READINESS.md` |
-| 全局追踪 | `schemas/project-state.schema.json` | `references/recovery-patterns.md`（中断恢复时） |
+| 全局追踪 | `schemas/project-state.schema.json` + `workflows/preemptive-compaction.md` | `references/recovery-patterns.md`（中断恢复时） |
 | Git Worktree | `workflows/using-git-worktrees.md` | — |
 
 > **关键**：Phase 3 执行单任务时，`references/TASK-EXECUTION.md` 是唯一必读——它合并了 TDD 铁律 + Gate Function + WBS 更新规则 + 完工自检清单。不要再跳转多个文件。
