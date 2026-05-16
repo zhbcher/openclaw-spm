@@ -8,6 +8,18 @@
 - 每次 `write` 覆盖现有文件后
 - 子代理声称完成但未附 diff 证据时
 
+## 前置检查：Edit 错误检测（借鉴 OMO edit-error-recovery）
+
+**在 git diff 验证之前，先检查 edit 工具是否调用成功：**
+
+| 错误消息 | 含义 | 必须做什么 |
+|---------|------|-----------|
+| `oldString not found` | 你对文件当前内容有错误假设 | **停止。** 用 read 重新读文件，基于实际内容构造新的 oldText |
+| `oldString found multiple times` | 匹配不够精确 | **增加更多上下文。** 在 oldText 前后各加 2-3 行，确保唯一匹配 |
+| `newString must be different` | 你在尝试编辑成相同内容 | **停下来想。** 为什么要编辑成一样的？目标到底是什么？ |
+
+> ⚠️ 绝不重复相同参数的 edit 调用。每次重试必须改变 oldText（基于重新读取的实际内容）。
+
 ## 验证流程
 
 ```

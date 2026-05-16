@@ -8,6 +8,37 @@
 - 每 3 轮对话后自检
 - 执行 Phase 3 并行任务前
 
+## 🆕 Token 预算追踪（借鉴 OMO context-window-monitor）
+
+**在触发压缩之前，先知道自己到底用了多少。**
+
+### 估算方法
+```
+tokens_used ≈ total_chars / 3.5
+usage_pct = tokens_used / model_context_window * 100
+```
+
+### 记录格式（写入 Heartbeat Log）
+```markdown
+| Time | Tokens Est. | Usage % | Trigger |
+|------|-----------|---------|---------|
+| 14:23 | ~45K / 200K | 22% | - |
+| 14:35 | ~95K / 200K | 47% | - |
+| 14:42 | ~135K / 200K | 67% | ⚠️ Level 1 |
+| 14:50 | ~170K / 200K | 85% | 🔴 Level 2 |
+```
+
+### 常见模型上下文窗口
+| 模型系列 | 上下文窗口 |
+|---------|-----------|
+| DeepSeek V4 | 200K |
+| Qwen 3.6 | 262K |
+| MiniMax M2.7 | 200K |
+| GPT-5.x | 200K |
+| Step-3.5 | 128K |
+
+> 每次切换模型后，重新读取当前模型的真实上下文窗口大小。
+
 ## 压缩策略
 
 ### Level 1: 轻度压缩（用量 > 60%）

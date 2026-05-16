@@ -16,7 +16,7 @@ allowed-tools: ["read", "write", "edit", "exec", "process", "sessions_spawn", "s
 
 SPM is a comprehensive skill for software project development in OpenClaw. It integrates:
 
-- **Superpowers** (19 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, Ralph Loop auto-retry, hashline edit verification, comment checker, preemptive compaction, todo enforcement, deep context initialization, and more
+- **Superpowers** (20 workflows): Design brainstorming, implementation planning, TDD, subagent-driven development, code review, systematic debugging, git worktrees, Ralph Loop auto-retry, hashline edit verification, comment checker, preemptive compaction, todo enforcement, deep context initialization, Prometheus interview mode, and more
 - **PM enhancements**: Soul-searching protocol, assumption documentation, safe sandbox (/freeze & /guard), three-tier quality gates, project scaffolding, deployment pipeline
 - **WBS Executor**: Structured task ledger with exit criteria, evidence tracking, heartbeat logging, interruption recovery, delivery summary
 
@@ -58,11 +58,12 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 ┌───────────────┐   ┌───────────────┐   ┌───────────────┐   ┌──────────────────┐
 │  PHASE 0      │   │  REQUIREMENT   │   │   PLANNING    │   │    EXECUTION     │
 │ ───────────── │   │ ─────────────  │   │  ──────────   │   │   ────────────   │
-│ • Deep Ctx    │   │ • Brainstorming│   │ • Write Plan  │   │ • Git Worktree   │
-│   Init        │   │ • Soul-Search  │   │ • WBS Ledger  │   │ • TDD Cycle      │
-│ • context-map │   │ • Design Doc   │   │ • Review Plan │   │ • Subagent Dev   │
-│   .md         │   │ • Assumptions  │   │ • Dependencies│   │ • Parallel Tasks │
-│               │   │               │   │               │   │ • Hashline Verify│
+│ • Deep Ctx    │   │ • Intent Class │   │ • Write Plan  │   │ • Git Worktree   │
+│   Init        │   │ • Research 1st │   │ • WBS Ledger  │   │ • TDD Cycle      │
+│ • context-map │   │ • Test Assess  │   │ • Review Plan │   │ • Subagent Dev   │
+│   .md         │   │ • Scope Lock   │   │ • Dependencies│   │ • Parallel Tasks │
+│               │   │ • Brainstorm   │   │               │   │ • Hashline Verify│
+│               │   │ • Design Doc   │   │               │   │                  │
 └───────┬───────┘   └───────┬───────┘   └───────┬───────┘   └────────┬─────────┘
         └───────────────────┼────────────────────┘
                             ▼
@@ -93,19 +94,21 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 ```
 ┌────────────────────────────────────────────────────────────────────┐
 │  PHASE 0: CONTEXT INIT [NEW]            PHASE 1: REQUIREMENT     │
-│  ┌──────────────────────┐              ┌────────────┐            │
-│  │ Deep Context Init    │──Auto──────▶ │Brainstorm  │→           │
-│  │ (context-map.md)     │              │(灵魂拷问)  │            │
-│  └──────────────────────┘              └──────┬─────┘            │
-│                                               │                   │
-└───────────────────────────────────────────────┼───────────────────┘
-                                                 │
-┌────────────────────────────────────────────────┼───────────────────┐
-│  PHASE 1: REQUIREMENT (cont.)   PHASE 2: PLANNING                 │
-│  ┌────────────┐                ┌──────────┐                       │
-│  │Design Doc  │──Manual──────▶ │WBS Plan  │                       │
-│  │(明确假设)  │  Review        │(任务分解)│                       │
-│  └────────────┘                └────┬─────┘                       │
+│  ┌──────────────────────┐              ┌────────────────────┐    │
+│  │ Deep Context Init    │──Auto──────▶ │ Intent Classify    │→  │
+│  │ (context-map.md)     │              │ + Research 1st     │   │
+│  └──────────────────────┘              │ + Test Assess      │   │
+│                                         │ + Scope Lock       │   │
+│                                         └─────────┬──────────┘   │
+│                                                    │              │
+└────────────────────────────────────────────────────┼──────────────┘
+                                                      │
+┌─────────────────────────────────────────────────────┼──────────────┐
+│  PHASE 1: REQUIREMENT (cont.)   PHASE 2: PLANNING                   │
+│  ┌────────────┐                ┌──────────┐                        │
+│  │Brainstorm  │──Manual──────▶ │WBS Plan  │                        │
+│  │+Design Doc │  Review        │(任务分解)│                        │
+│  └────────────┘                └────┬─────┘                        │
 └────────────────────────────────────────────────────┼──────────────┘
                                                       │
 ┌─────────────────────────────────────────────────────┼──────────────┐
@@ -382,6 +385,10 @@ Long sessions auto-monitor context window usage:
 
 ## Subagent Strategy
 
+### Model Routing (with Fallback)
+
+Each task has a `model_tier` (fast/standard/strong). If the primary model fails with a provider error, the system auto-switches through a fallback chain. See `references/model-fallback.md` for the complete fallback architecture.
+
 ### Task Dispatch (Single)
 
 ```
@@ -598,6 +605,7 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 - `workflows/comment-checker.md` — **🆕 去AI味注释审查**：检测冗余注释→自动清理
 - `workflows/todo-enforcement.md` — **🆕 任务完成硬件拦截**：WBS状态/Evidence/Criteria三重检查
 - `workflows/preemptive-compaction.md` — **🆕 上下文预压缩**：3级自动压缩+恢复点写入
+- `references/model-fallback.md` — **🆕 模型自动回退**：17种错误分类+fallback链+cooldown防抖
 - `workflows/external-research.md` — **🆕 外部资源分析**：结构化对比 + 采纳清单
 - `references/` — Templates, best practices, recovery patterns
 - `references/TASK-EXECUTION.md` — **执行单任务前必读的单一入口**（合并 TDD + Gate Function + WBS 更新规则 + 完工自检）

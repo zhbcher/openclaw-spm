@@ -8,7 +8,7 @@ Execute implementation plan by dispatching a fresh subagent per task. Each subag
 
 **Cold-Start Rule:** Every subagent receives the task's Context Brief — they must be able to execute without reading any other task's details.
 
-**Model Routing Rule:** Dispatch subagent at the task's `model_tier` — each tier maps to a different provider to avoid rate-limit contention during parallel dispatch.
+**Model Routing Rule:** Dispatch subagent at the task's `model_tier` — each tier maps to a different provider to avoid rate-limit contention during parallel dispatch. **If dispatch fails due to provider error, Model Fallback auto-switches (see `references/model-fallback.md`).**
 
 | Tier | Model | Provider | Use Case |
 |------|-------|----------|----------|
@@ -61,9 +61,24 @@ For each task from WBS ledger:
   6. **sessions_yield — wait with heartbeat:** if wait > 5 min without return, write heartbeat entry
   7. Implementer asks questions? Answer them.
   8. Implementer completes → reports DONE/DONE_WITH_CONCERNS/BLOCKED
+
+  8a. **🆕 空响应检测（借鉴 OMO empty-task-response-detector）：**
+      如果子代理返回空内容或仅含 error：
+      - 子代理静默失败。检查心跳日志确认原因。
+      - Model Fallback 自动切换 → 重新 dispatch（最多 2 次）。
+      - 2 次仍空返回 → 标记 BLOCKED（reason: silent_failure）。
+
   9. BLOCKED? → Check plan-mutation.md for appropriate mutation (split/insert/skip)
   10. **Heartbeat: log subagent return + evidence**
   11. Update WBS: attach evidence output, status=done (or blocked)
+
+  11a. **🆕 子代理续接信息（借鉴 OMO task-resume-info）：**
+       如果子代理返回时携带 session_id，在 Heartbeat Log 中记录续接模板：
+       ```
+       Resume: sessions_spawn(task="...", model="...", resume_session="ses_xxx")
+       ```
+       后续如需续接此子代理（如补充修复），直接使用此模板。
+
   12. Dispatch spec compliance reviewer (standard model)
   13. Issues? → Implementer fixes → Re-review
   14. Dispatch code quality reviewer (standard model)
