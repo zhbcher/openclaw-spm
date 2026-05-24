@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SPM Skill Manifest",
+  "description": "外部 SPM 技能的 skill.json 元数据。内置技能可直接从 SKILL.md frontmatter 读取。",
+  "type": "object",
+  "required": ["name", "version"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "技能唯一标识，如 spm-cicd"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "语义版本号"
+    },
+    "description": {
+      "type": "string",
+      "description": "一句话描述"
+    },
+    "triggers": {
+      "type": "object",
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "触发关键词列表"
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "phase-0_context",
+              "phase-1_requirement",
+              "phase-2_planning",
+              "phase-3_execution",
+              "phase-4_quality",
+              "phase-5_delivery"
+            ]
+          },
+          "description": "自动触发阶段"
+        }
+      }
+    },
+    "requires": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "依赖的二进制工具"
+    },
+    "entry": {
+      "type": "string",
+      "default": "SKILL.md",
+      "description": "入口文件（相对于技能目录）"
+    }
+  }
+}
