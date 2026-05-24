@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/SPM-v3.1.0-76B900?style=for-the-badge" alt="Version" />
+  <img src="https://img.shields.io/badge/SPM-v3.2.0-6366f1?style=for-the-badge" alt="Version" />
   <img src="https://img.shields.io/badge/OpenClaw-Skill-6366f1?style=for-the-badge" alt="OpenClaw Skill" />
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License" />
   <img src="https://img.shields.io/badge/ClawHub-spm-oklch(62%_0.22_260)?style=for-the-badge" alt="ClawHub" />
@@ -9,9 +9,20 @@
 
 > **Production-grade project management skill for AI coding agents.**
 >
-> Structured WBS tracking · hash attestation security · auto context injection · 6-phase lifecycle · 22 workflows · multi-agent orchestration.
+> Structured event auditing · WBS hash attestation · pluggable skill system · security gate · 6-phase lifecycle · 22 workflows · multi-agent orchestration.
 >
-> 生产级 AI 编程项目管理技能 — WBS 任务台账 · 哈希完整性保护 · 上下文自动注入 · 六阶段生命周期 · 子代理编排。
+> 生产级 AI 编程项目管理技能 — 事件流审计 · WBS 哈希认证 · 可插拔技能系统 · 安全门禁 · 六阶段生命周期 · 子代理编排。
+
+---
+
+## 🆕 What's New in v3.2
+
+| Module | Description |
+|--------|-------------|
+| **Event Store** | 结构化事件审计 — subagent dispatch、WBS update、quality gate 全部可追溯 |
+| **Skill Loader** | 多源技能加载 — 内置/用户/项目三级，关键词匹配+阶段触发，不改核心代码即可扩展 |
+| **Security Gate** | safe/risky/dangerous 三级分类 — `rm -rf /` 类命令自动拦截 |
+| **Token Budget** | 自动检测模型上下文窗口，可配置 `keepRecent`/`maxSize`，运行时动态调参 |
 
 ---
 
@@ -28,7 +39,9 @@ AI coding agents are powerful but easily lose context in long sessions. **SPM so
 | Write code first, think later | 📐 IntentGate → Design → review → implement |
 | "Did we test this?" | 🛡️ Three-tier quality gates + auto-retry |
 | Agent stuck on error | 🔄 Model fallback + Ralph Loop auto-recovery |
-| Context window overload | 📊 Preemptive compaction with token tracking |
+| Context window overload | 📊 TokenBudget: auto-detect + configurable compaction |
+| "What happened in that subagent?" | 🧾 Event Stream: every dispatch/result/gate recorded |
+| "Can I add a workflow without touching core?" | 🔌 Skill Loader: drop a `skill.json` and it's live |
 
 ---
 
@@ -174,7 +187,13 @@ spm/
 ├── CHECKPOINTS/               # Phase hard-gate templates
 ├── CHECKLISTS/                # Completion checklists
 ├── schemas/                   # JSON schema definitions
-└── docs/                      # Design references, guides
+├── src/                       # 🆕 v3.2 核心模块
+│   ├── types.ts                #   SPMEvent · EventKind · ConfirmationMode
+│   ├── event-store.ts          #   结构化事件审计
+│   ├── skill-loader.ts         #   多源技能发现与加载
+│   ├── security-gate.ts        #   三级安全门禁
+│   └── token-budget.ts         #   上下文预算追踪
+├── docs/                       # Design references, guides
 ```
 
 ---
