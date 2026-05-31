@@ -68,12 +68,27 @@ export class TokenBudget {
   private thresholds: { light: number; medium: number; heavy: number };
   private keepRecent: number;
   private maxSize: number;
+  private toolAllocation: Map<string, { weight: number; priority: number }>;
 
-  constructor(config: TokenBudgetConfig = {}) {
+  constructor(config: TokenBudgetConfig = {}, allocations?: Record<string, { weight: number; priority: number }>) {
     this.windowSize = config.windowSize || detectWindow(config.model || '');
     this.thresholds = config.thresholds || { light: 0.6, medium: 0.8, heavy: 0.9 };
     this.keepRecent = config.keepRecent || 4;
     this.maxSize = config.maxSize || this.windowSize;
+    // Setup tool allocation map with defaults favoring CodeGraph tools as low-cost high-benefit
+    this.toolAllocation = new Map<string, { weight: number; priority: number }>();
+    const defaults: Record<string, { weight: number; priority: number }> = {
+      'codegraph_context': { weight: 0.2, priority: 0.8 },
+      'codegraph_search': { weight: 0.2, priority: 0.8 },
+      'codegraph_explore': { weight: 0.5, priority: 0.8 },
+      'codegraph_callers': { weight: 0.2, priority: 0.8 },
+      'codegraph_callees': { weight: 0.2, priority: 0.8 },
+      'codegraph_impact': { weight: 0.1, priority: 0.9 },
+    };
+    const merged = { ...defaults, ...allocations };
+    for (const [tool, alloc] of Object.entries(merged)) {
+      this.toolAllocation.set(tool, alloc);
+    }
   }
 
   /** 估算 token 数（chars / ratio） */
@@ -135,5 +150,14 @@ export class TokenBudget {
     if (patch.thresholds) this.thresholds = { ...this.thresholds, ...patch.thresholds };
     if (patch.keepRecent !== undefined) this.keepRecent = patch.keepRecent;
     if (patch.maxSize !== undefined) this.maxSize = patch.maxSize;
+  }
+
+  // CodeGraph integration: get weight and priority for tool calls
+  getWeight(toolName: string): number {
+    return this.toolAllocation.get(toolName)?.weight ?? 1.0;
+  }
+
+  getPriority(toolName: string): number {
+    return this.toolAllocation.get(toolName)?.priority ?? 0.5;
   }
 }
