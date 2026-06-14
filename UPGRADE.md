@@ -14,8 +14,10 @@
 
 ```bash
 # From SPM skill directory:
-cp scripts/*.sh scripts/*.py your-project/scripts/
-# Or run init-spm.sh which copies them automatically
+# 核心脚本：cp scripts/attest-wbs.sh scripts/verify-wbs.sh scripts/checkpoint.sh scripts/switch-ledger.sh your-project/scripts/
+# 项目模板：cp scripts/e2e.sh scripts/generate.sh scripts/validate_contract.sh scripts/quality-check.sh your-project/scripts/
+# Python 脚本：cp scripts/verify_checklists.py scripts/inject-wbs-context.py scripts/session-recovery.py your-project/scripts/
+# 或直接运行 init-spm.sh 自动完成
 ```
 
 ### 📝 WBS Ledger Changes

@@ -22,7 +22,7 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 
 **Core Philosophy:** SPM is an orchestrator, not a monolith. Each phase triggers the right workflow. The WBS task ledger is the single source of truth for tracking — now protected by hash attestation and auto-injected into context.
 
-### 🆕 v3.0 New Features
+### 🆕 v3.0.0 New Features
 
 | Feature | Description | Priority |
 |---------|-------------|----------|
@@ -645,7 +645,7 @@ Enable SPM in `~/.openclaw/openclaw.json`:
 
 ---
 
-## 🆕 v3.0 Scripts Reference
+## 🆕 v3.0.0 Scripts Reference
 
 | Script | Purpose | When to Use |
 |--------|---------|-------------|
@@ -697,7 +697,7 @@ Switch: `/spm:mode minimal` or `/spm:mode full`
 
 ---
 
-## 📁 Project Structure (v3.0)
+## 📁 Project Structure (v3.0.0)
 
 ```
 spm/

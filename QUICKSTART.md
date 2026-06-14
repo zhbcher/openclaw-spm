@@ -7,7 +7,7 @@
 ## 1. 安装（30 秒）
 
 ```bash
-git clone https://github.com/zhbcher/openclaw-spm.git ~/.openclaw/workspace/spm
+git clone https://github.com/zhbcher/openclaw-spm.git ~/.openclaw/workspace/.agents/skills/openclaw-spm
 ```
 
 已安装就跳过。

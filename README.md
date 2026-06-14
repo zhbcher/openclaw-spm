@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/SPM-v3.2.0-6366f1?style=for-the-badge" alt="Version" />
+  <img src="https://img.shields.io/badge/SPM-v3.0.0-6366f1?style=for-the-badge" alt="Version" />
   <img src="https://img.shields.io/badge/OpenClaw-Skill-6366f1?style=for-the-badge" alt="OpenClaw Skill" />
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License" />
   <img src="https://img.shields.io/badge/ClawHub-spm-oklch(62%_0.22_260)?style=for-the-badge" alt="ClawHub" />
@@ -15,7 +15,7 @@
 
 ---
 
-## 🆕 What's New in v3.2
+## 🆕 What's New in v3.0
 
 | Module | Description |
 |--------|-------------|

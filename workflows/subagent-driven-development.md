@@ -24,7 +24,7 @@ Execute implementation plan by dispatching a fresh subagent per task. Each subag
    - React/Vue/Next project → auto-include skills/spm-frontend/SKILL.md
    - (future: API project → spm-api, testing focus → spm-testing, design focus → spm-design-system)
 3. If match found → prepend to subagent prompt:
-   "Before implementing, read ~/.openclaw/workspace/spm/skills/spm-frontend/SKILL.md for frontend coding standards."
+   "Before implementing, read .agents/skills/openclaw-spm/skills/spm-frontend/SKILL.md for frontend coding standards."
 ```
 
 **Sub-skills never block execution** — if a sub-skill file is missing, the task continues normally. Sub-skills are quality enhancers, not gates.
