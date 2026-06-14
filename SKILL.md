@@ -29,7 +29,7 @@ SPM is a comprehensive skill for software project development in OpenClaw. It in
 | **WBS Hash Attestation** | SHA-256 integrity protection; tampered ledgers auto-detected | 🔒 Security |
 | **Hook Auto-Injection** | Active tasks auto-injected into context before every tool call | 🤖 Automation |
 | **Session Recovery** | Auto-generated recovery reports from heartbeat logs | 🔄 Resilience |
-| **Parallel Task Pointers** | `.active_ledger` symlink + `switch-ledger.sh` for multi-task isolation | 📂 Multi-task |
+| **Parallel Task Pointers** | `.active_ledger` symlink + `scripts/switch-ledger.sh` for multi-task isolation | 📂 Multi-task |
 | **SPM Minimal Mode** | 5-rule lightweight mode for <10 task projects | 🏃 Quick Start |
 | **Template/Script Separation** | Clear distinction: user-project files vs skill internals | 📋 UX |
 

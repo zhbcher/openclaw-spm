@@ -11,7 +11,7 @@ echo ""
 
 # Create directory structure
 mkdir -p docs/spm/{ledgers,specs,plans,checkpoints}
-mkdir -p .spm
+mkdir -p src tests .spm
 
 # Copy WBS Ledger template if not exists
 if [ ! -f docs/spm/ledger.md ]; then
