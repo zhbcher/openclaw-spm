@@ -37,11 +37,11 @@ for line in lines:
 heartbeats = []
 in_hb = False
 for line in lines:
-    if "## Heartbeat Log" in line:
+    if "## Heartbeat Log" in line or "## 心跳日志" in line:
         in_hb = True
         continue
     if in_hb:
-        if line.strip().startswith("|") and "Time" not in line:
+        if line.strip().startswith("|") and "Time" not in line and "时间" not in line:
             cells = [c.strip() for c in line.split("|")[1:-1]]
             if len(cells) >= 5:
                 heartbeats.append(cells)
@@ -52,7 +52,7 @@ for line in lines:
 doing_tasks = []
 in_wbs = False
 for line in lines:
-    if "## WBS" in line or "| ID | Work Package" in line:
+    if "## WBS" in line or "## WBS 任务分解" in line or "| ID | Work Package" in line or "| ID | 任务名称" in line:
         in_wbs = True
         continue
     if in_wbs:

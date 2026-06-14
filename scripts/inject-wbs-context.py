@@ -38,7 +38,7 @@ for line in lines:
 heartbeat_lines = []
 in_hb = False
 for line in lines:
-    if "## Heartbeat Log" in line:
+    if "## Heartbeat Log" in line or "## 心跳日志" in line:
         in_hb = True
         continue
     if in_hb:
@@ -53,7 +53,7 @@ heartbeat_lines = heartbeat_lines[-MAX_HB_LINES:]
 active_state = []
 in_active = False
 for line in lines:
-    if "## Active State" in line:
+    if "## Active State" in line or "## 当前执行状态" in line:
         in_active = True
         continue
     if in_active:

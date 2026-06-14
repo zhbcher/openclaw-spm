@@ -187,7 +187,7 @@ spm/
 ├── CHECKPOINTS/               # Phase hard-gate templates
 ├── CHECKLISTS/                # Completion checklists
 ├── schemas/                   # JSON schema definitions
-├── src/                       # 🆕 v3.2 核心模块
+├── docs/architecture/config/          # 🆕 Architecture design docs
 │   ├── types.ts                #   SPMEvent · EventKind · ConfirmationMode
 │   ├── event-store.ts          #   结构化事件审计
 │   ├── skill-loader.ts         #   多源技能发现与加载

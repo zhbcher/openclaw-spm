@@ -18,30 +18,22 @@
 ## Fallback Chain 配置
 
 ```
-SPM Tier 扩展（在原三档基础上增加 fallback_chain）：
+SPM Tier 定义（三档，模型 ID 由用户在外部配置中映射，技能不硬编码）:
 
 fast:
-  primary: step35 (nvidia-nvcf)
-  fallback_chain:
-    - MiniMaxM27 (blazeai)         # 同样快速便宜
-    - GPT54 (custom)               # 最后手段
+  usage: 简单任务（boilerplate、配置、简单重构）
+  fallback_count: 1-2
 
 standard:
-  primary: SensenovaDeepSeek (sensenova)
-  fallback_chain:
-    - DeepSeekV4Pro (deepseek)     # 同能力级
-    - Qwen36Plus (blazeai)         # 备选推理模型
-    - GPT54 (custom)               # 最后手段
+  usage: 常规实现、测试
+  fallback_count: 1-2
 
 strong:
-  primary: DeepSeekV4Pro (deepseek)
-  fallback_chain:
-    - QwenMaxPreview (blazeai)     # 顶级推理
-    - SensenovaDeepSeek (sensenova)# 备选
-    - GPT54 (custom)               # 最后手段
+  usage: 架构设计、根因分析、复杂算法
+  fallback_count: 1-2
 ```
 
-## 执行流程
+参考: 在 WBS 台账的 `model_tier` 列指定 tier，dispatch 时从外部映射表读取实际模型 ID。
 
 ```
 子代理 dispatch 失败:

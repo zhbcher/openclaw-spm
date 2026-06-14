@@ -45,7 +45,7 @@ All notable changes to SPM will be documented in this file.
 
 ### Changed
 - **SKILL.md**: Complete rewrite with mode architecture, template index, reading guide, model routing
-- **Config system**: Rewrote `config/default.yaml` + `src/config/` from StockPulse-specific to SPM project management
+- **Config system**: Rewrote `config/default.yaml` + `docs/architecture/config/` from StockPulse-specific to SPM project management
 - **All subagent prompts**: Strengthened with concrete checklists, anti-patterns, and output formats
 - **WBS ledger**: Added Context Brief column, Mutation Log section, aligned `Dependencies` naming across all files
 - **Workflows**: Unified to 14 workflows, writing-plans adds adversarial review step, subagent-driven-development adds cold-start + model routing
@@ -57,7 +57,7 @@ All notable changes to SPM will be documented in this file.
 - `validate_contract.sh`: Directory `-nt` unreliability, missing client file check
 - `verify_checklists.py`: `package.json` absence guard
 - `quality-check.sh`: Fragile pipe with `set -e`
-- `setup-checkpoints.sh`: Duplicate npm script blocks merged
+- `init-spm.sh (合并了checkpoint安装)`: Duplicate npm script blocks merged
 - OpenAPI spec: `/projects` path duplication fixed
 - SKILL.md: `sessions_yield` added to allowed-tools
 - All files: StockPulse artifacts removed (financial config, candle data, collector references)

@@ -10,11 +10,11 @@ Execute implementation plan by dispatching a fresh subagent per task. Each subag
 
 **Model Routing Rule:** Dispatch subagent at the task's `model_tier` — each tier maps to a different provider to avoid rate-limit contention during parallel dispatch. **If dispatch fails due to provider error, Model Fallback auto-switches (see `references/model-fallback.md`).**
 
-| Tier | Model | Provider | Use Case |
-|------|-------|----------|----------|
-| fast | `step35` | nvidia-nvcf | boilerplate, config, simple refactor |
-| standard | `SensenovaDeepSeek` | sensenova | regular implementation, tests |
-| strong | `DeepSeekV4Pro` | deepseek | architecture, root-cause, invariants |
+| Tier | 用途 | 建议配置方式 |
+|------|------|-------------|
+| fast | boilerplate, config, simple refactor | 轻量模型，fallback 1-2 个（在 WBS model_tier 列指定） |
+| standard | regular implementation, tests | 主力模型，fallback 不同 provider |
+| strong | architecture, root-cause, invariants | 能力最强模型，fallback 1-2 个 |
 
 **Sub-Skill Auto-Discovery:** Before dispatching any subagent, scan `skills/` directory for applicable sub-skills:
 
@@ -46,7 +46,7 @@ Heartbeat table format:
 ```
 | Time | Active | Completed | Evidence | Resume Point |
 |------|--------|-----------|----------|-------------|
-| HH:MM | Subagent T2 (step35) | T1 spec review done | review passed | T2 subagent session |
+| HH:MM | Subagent T2 (fast) | T1 spec review done | review passed | T2 subagent session |
 ```
 
 ## The Process

@@ -21,7 +21,7 @@ your-project/
 │   ├── default.yaml        # Base configuration (committed)
 │   ├── staging.yaml        # Staging overrides (gitignored or committed)
 │   └── production.yaml     # Production overrides (gitignored)
-├── src/config/
+├── docs/architecture/config/
 │   ├── index.ts            # Loader + get() helper
 │   ├── schema.ts           # Zod validation schema
 │   └── validators.ts       # Custom validation (if needed)
@@ -40,7 +40,7 @@ Edit `config/default.yaml` to define your project's standard settings. The SPM-p
 - `deployment` (enabled, environment)
 - `logging` (level, format)
 
-Customize this file to your domain. Add new sections as needed; extend `ConfigSchema` in `src/config/schema.ts` accordingly.
+Customize this file to your domain. Add new sections as needed; extend `ConfigSchema` in `docs/architecture/config/schema.ts` accordingly.
 
 ```yaml
 # Example SPM project config
@@ -132,7 +132,7 @@ async function executeTask(task: Task) {
 
 ## Validation
 
-The `ConfigSchema` in `src/config/schema.ts` defines the shape. It uses Zod for runtime validation. On `loadConfig()`, the merged config is parsed against the schema; if invalid, the process exits with an error.
+The `ConfigSchema` in `docs/architecture/config/schema.ts` defines the shape. It uses Zod for runtime validation. On `loadConfig()`, the merged config is parsed against the schema; if invalid, the process exits with an error.
 
 This catches:
 - Missing required fields
@@ -180,7 +180,7 @@ If you have separate services, you can:
 ## Troubleshooting
 
 **Q: `Config validation failed` on startup**  
-A: Check the error message; likely a type mismatch in `config/default.yaml` or environment variable. Validate against `src/config/schema.ts`.
+A: Check the error message; likely a type mismatch in `config/default.yaml` or environment variable. Validate against `docs/architecture/config/schema.ts`.
 
 **Q: Config changes not taking effect**  
 A: Ensure you restarted the service. Config is loaded once at startup; not hot-reloaded.
@@ -195,7 +195,7 @@ A: Currently one environment file (`{env}.yaml`) is supported. For complex overr
 
 ## Next Steps
 
-- Add `config/` and `src/config/` to your project
+- Add `config/` and `docs/architecture/config/` to your project
 - Move hard-coded values from code into `default.yaml`
 - Refactor code to use `get()` accessor
 - Update `schema.ts` if you added custom sections

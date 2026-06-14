@@ -281,7 +281,7 @@ The WBS task ledger is the **single source of truth** for the entire project. Ev
 
 **Sub-flow: Task Execution**
 - For **Subagent-Driven**: see `workflows/subagent-driven-development.md`
-  - Each subagent receives **cold-start Context Brief** + **model tier routing** (fast→step35, standard→SensenovaDeepSeek, strong→DeepSeekV4Pro — 三 provider 隔离避免速率限制)
+  - Each subagent receives **cold-start Context Brief** + **model tier routing** (fast / standard / strong — 三 tier 由用户在 WBS model_tier 列中配置，技能不硬编码模型 ID)
   - BLOCKED tasks trigger mutation protocol (see references/plan-mutation.md)
 - For **Inline**: see `workflows/executing-plans.md`
 - For **Parallel Tasks**: see `workflows/dispatching-parallel-agents.md`
@@ -508,7 +508,7 @@ See `docs/quality-enhancements.md` for complete documentation.
 **Quick enable:**
 ```bash
 cd your-spm-project
-bash skills/spm/scripts/setup-checkpoints.sh
+bash scripts/init-spm.sh
 ```
 
 This installs:

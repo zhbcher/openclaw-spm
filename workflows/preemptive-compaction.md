@@ -1,8 +1,10 @@
-# Preemptive Compaction — 上下文预压缩
+# Preemptive Compaction — 上下文预压缩（当前不适用）
 
-> 借鉴 OMO 的 Preemptive Compaction。长会话中自动监控上下文窗口用量，逼近上限时主动压缩防 OOM。
+> ⚠️ **当前不适用**: Agent 没有操作会话上下文的工具权限。实际上下文管理由 OpenClaw 内置 compaction 处理。
+>
+> 本文件保留作为参考，但不应该在实际执行中触发。
 
-## 触发条件
+## 触发条件（原始参考）
 
 - 每个子代理任务完成后检查
 - 每 3 轮对话后自检

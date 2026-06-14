@@ -277,7 +277,7 @@ echo "  2. Run: /spm:start"
 echo ""
 echo "Optional (recommended):"
 echo "  1. Enable WBS attestation:  bash scripts/attest-wbs.sh"
-echo "  2. Enable checkpointing:    bash scripts/setup-checkpoints.sh"
+echo "  2. Enable checkpointing:    bash scripts/init-spm.sh"
 ```
 
 ---

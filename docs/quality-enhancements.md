@@ -16,7 +16,7 @@ These enhancements are delivered in two phases:
 **Setup:**
 ```bash
 cd your-spm-project
-bash skills/spm/scripts/setup-checkpoints.sh
+bash scripts/init-spm.sh
 ```
 
 This installs templates, scripts, and npm wrappers. See usage guide below.
@@ -25,7 +25,7 @@ This installs templates, scripts, and npm wrappers. See usage guide below.
 
 - **Single Source of Truth** — `api/openapi.yaml` + `scripts/generate.sh` + `scripts/validate_contract.sh`
 - **End-to-End Automation** — `scripts/e2e.sh` (build → test → deploy → health check)
-- **Configuration-as-Code** — `config/default.yaml` + `src/config/` loader
+- **Configuration-as-Code** — `config/default.yaml` + `docs/architecture/config/` loader
 
 Enable after Phase 1 is stable. See respective sections for details.
 
@@ -234,7 +234,7 @@ config/
 ├── staging.yaml        # Overrides (gitignored)
 └── indices.yaml        # Indicator parameters (committed)
 
-src/config/
+docs/architecture/config/
 ├── index.ts            # Loader (loads proper env file)
 ├── schema.ts           # Zod validation schema
 └── validators.ts       # Custom validation (e.g., range checks)
@@ -285,7 +285,7 @@ Run the setup script:
 
 ```bash
 cd /path/to/spm-project
-bash skills/spm/scripts/setup-checkpoints.sh
+bash scripts/init-spm.sh
 ```
 
 This will:
